@@ -1,0 +1,12 @@
+<h1>Verify your email</h1>
+<p>We sent a 6-digit code to {{ email }}. Enter it below:</p>
+{% if messages %}
+  <ul>
+  {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+  </ul>
+{% endif %}
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="code" maxlength="6" required>
+    <button type="submit">Verify</button>
+</form>
