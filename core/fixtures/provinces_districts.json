@@ -1,0 +1,429 @@
+[
+  {
+    "model": "core.province",
+    "pk": 1,
+    "fields": { "name": "Koshi Province", "order": 1 }
+  },
+  {
+    "model": "core.province",
+    "pk": 2,
+    "fields": { "name": "Madhesh Province", "order": 2 }
+  },
+  {
+    "model": "core.province",
+    "pk": 3,
+    "fields": { "name": "Bagmati Province", "order": 3 }
+  },
+  {
+    "model": "core.province",
+    "pk": 4,
+    "fields": { "name": "Gandaki Province", "order": 4 }
+  },
+  {
+    "model": "core.province",
+    "pk": 5,
+    "fields": { "name": "Lumbini Province", "order": 5 }
+  },
+  {
+    "model": "core.province",
+    "pk": 6,
+    "fields": { "name": "Karnali Province", "order": 6 }
+  },
+  {
+    "model": "core.province",
+    "pk": 7,
+    "fields": { "name": "Sudurpashchim Province", "order": 7 }
+  },
+
+  {
+    "model": "core.district",
+    "pk": 1,
+    "fields": { "province": 1, "name": "Taplejung" }
+  },
+  {
+    "model": "core.district",
+    "pk": 2,
+    "fields": { "province": 1, "name": "Sankhuwasabha" }
+  },
+  {
+    "model": "core.district",
+    "pk": 3,
+    "fields": { "province": 1, "name": "Solukhumbu" }
+  },
+  {
+    "model": "core.district",
+    "pk": 4,
+    "fields": { "province": 1, "name": "Okhaldhunga" }
+  },
+  {
+    "model": "core.district",
+    "pk": 5,
+    "fields": { "province": 1, "name": "Khotang" }
+  },
+  {
+    "model": "core.district",
+    "pk": 6,
+    "fields": { "province": 1, "name": "Bhojpur" }
+  },
+  {
+    "model": "core.district",
+    "pk": 7,
+    "fields": { "province": 1, "name": "Dhankuta" }
+  },
+  {
+    "model": "core.district",
+    "pk": 8,
+    "fields": { "province": 1, "name": "Terhathum" }
+  },
+  {
+    "model": "core.district",
+    "pk": 9,
+    "fields": { "province": 1, "name": "Panchthar" }
+  },
+  {
+    "model": "core.district",
+    "pk": 10,
+    "fields": { "province": 1, "name": "Ilam" }
+  },
+  {
+    "model": "core.district",
+    "pk": 11,
+    "fields": { "province": 1, "name": "Jhapa" }
+  },
+  {
+    "model": "core.district",
+    "pk": 12,
+    "fields": { "province": 1, "name": "Morang" }
+  },
+  {
+    "model": "core.district",
+    "pk": 13,
+    "fields": { "province": 1, "name": "Sunsari" }
+  },
+  {
+    "model": "core.district",
+    "pk": 14,
+    "fields": { "province": 1, "name": "Udayapur" }
+  },
+
+  {
+    "model": "core.district",
+    "pk": 15,
+    "fields": { "province": 2, "name": "Saptari" }
+  },
+  {
+    "model": "core.district",
+    "pk": 16,
+    "fields": { "province": 2, "name": "Siraha" }
+  },
+  {
+    "model": "core.district",
+    "pk": 17,
+    "fields": { "province": 2, "name": "Dhanusha" }
+  },
+  {
+    "model": "core.district",
+    "pk": 18,
+    "fields": { "province": 2, "name": "Mahottari" }
+  },
+  {
+    "model": "core.district",
+    "pk": 19,
+    "fields": { "province": 2, "name": "Sarlahi" }
+  },
+  {
+    "model": "core.district",
+    "pk": 20,
+    "fields": { "province": 2, "name": "Rautahat" }
+  },
+  {
+    "model": "core.district",
+    "pk": 21,
+    "fields": { "province": 2, "name": "Bara" }
+  },
+  {
+    "model": "core.district",
+    "pk": 22,
+    "fields": { "province": 2, "name": "Parsa" }
+  },
+
+  {
+    "model": "core.district",
+    "pk": 23,
+    "fields": { "province": 3, "name": "Sindhupalchok" }
+  },
+  {
+    "model": "core.district",
+    "pk": 24,
+    "fields": { "province": 3, "name": "Rasuwa" }
+  },
+  {
+    "model": "core.district",
+    "pk": 25,
+    "fields": { "province": 3, "name": "Dhading" }
+  },
+  {
+    "model": "core.district",
+    "pk": 26,
+    "fields": { "province": 3, "name": "Nuwakot" }
+  },
+  {
+    "model": "core.district",
+    "pk": 27,
+    "fields": { "province": 3, "name": "Kathmandu" }
+  },
+  {
+    "model": "core.district",
+    "pk": 28,
+    "fields": { "province": 3, "name": "Bhaktapur" }
+  },
+  {
+    "model": "core.district",
+    "pk": 29,
+    "fields": { "province": 3, "name": "Lalitpur" }
+  },
+  {
+    "model": "core.district",
+    "pk": 30,
+    "fields": { "province": 3, "name": "Kavrepalanchok" }
+  },
+  {
+    "model": "core.district",
+    "pk": 31,
+    "fields": { "province": 3, "name": "Sindhuli" }
+  },
+  {
+    "model": "core.district",
+    "pk": 32,
+    "fields": { "province": 3, "name": "Ramechhap" }
+  },
+  {
+    "model": "core.district",
+    "pk": 33,
+    "fields": { "province": 3, "name": "Dolakha" }
+  },
+  {
+    "model": "core.district",
+    "pk": 34,
+    "fields": { "province": 3, "name": "Makwanpur" }
+  },
+  {
+    "model": "core.district",
+    "pk": 35,
+    "fields": { "province": 3, "name": "Chitwan" }
+  },
+
+  {
+    "model": "core.district",
+    "pk": 36,
+    "fields": { "province": 4, "name": "Gorkha" }
+  },
+  {
+    "model": "core.district",
+    "pk": 37,
+    "fields": { "province": 4, "name": "Manang" }
+  },
+  {
+    "model": "core.district",
+    "pk": 38,
+    "fields": { "province": 4, "name": "Mustang" }
+  },
+  {
+    "model": "core.district",
+    "pk": 39,
+    "fields": { "province": 4, "name": "Myagdi" }
+  },
+  {
+    "model": "core.district",
+    "pk": 40,
+    "fields": { "province": 4, "name": "Kaski" }
+  },
+  {
+    "model": "core.district",
+    "pk": 41,
+    "fields": { "province": 4, "name": "Lamjung" }
+  },
+  {
+    "model": "core.district",
+    "pk": 42,
+    "fields": { "province": 4, "name": "Tanahun" }
+  },
+  {
+    "model": "core.district",
+    "pk": 43,
+    "fields": { "province": 4, "name": "Nawalpur" }
+  },
+  {
+    "model": "core.district",
+    "pk": 44,
+    "fields": { "province": 4, "name": "Syangja" }
+  },
+  {
+    "model": "core.district",
+    "pk": 45,
+    "fields": { "province": 4, "name": "Parbat" }
+  },
+  {
+    "model": "core.district",
+    "pk": 46,
+    "fields": { "province": 4, "name": "Baglung" }
+  },
+
+  {
+    "model": "core.district",
+    "pk": 47,
+    "fields": { "province": 5, "name": "Rukum East" }
+  },
+  {
+    "model": "core.district",
+    "pk": 48,
+    "fields": { "province": 5, "name": "Rolpa" }
+  },
+  {
+    "model": "core.district",
+    "pk": 49,
+    "fields": { "province": 5, "name": "Pyuthan" }
+  },
+  {
+    "model": "core.district",
+    "pk": 50,
+    "fields": { "province": 5, "name": "Gulmi" }
+  },
+  {
+    "model": "core.district",
+    "pk": 51,
+    "fields": { "province": 5, "name": "Arghakhanchi" }
+  },
+  {
+    "model": "core.district",
+    "pk": 52,
+    "fields": { "province": 5, "name": "Palpa" }
+  },
+  {
+    "model": "core.district",
+    "pk": 53,
+    "fields": { "province": 5, "name": "Nawalparasi East" }
+  },
+  {
+    "model": "core.district",
+    "pk": 54,
+    "fields": { "province": 5, "name": "Rupandehi" }
+  },
+  {
+    "model": "core.district",
+    "pk": 55,
+    "fields": { "province": 5, "name": "Kapilvastu" }
+  },
+  {
+    "model": "core.district",
+    "pk": 56,
+    "fields": { "province": 5, "name": "Dang" }
+  },
+  {
+    "model": "core.district",
+    "pk": 57,
+    "fields": { "province": 5, "name": "Banke" }
+  },
+  {
+    "model": "core.district",
+    "pk": 58,
+    "fields": { "province": 5, "name": "Bardiya" }
+  },
+
+  {
+    "model": "core.district",
+    "pk": 59,
+    "fields": { "province": 6, "name": "Dolpa" }
+  },
+  {
+    "model": "core.district",
+    "pk": 60,
+    "fields": { "province": 6, "name": "Mugu" }
+  },
+  {
+    "model": "core.district",
+    "pk": 61,
+    "fields": { "province": 6, "name": "Humla" }
+  },
+  {
+    "model": "core.district",
+    "pk": 62,
+    "fields": { "province": 6, "name": "Jumla" }
+  },
+  {
+    "model": "core.district",
+    "pk": 63,
+    "fields": { "province": 6, "name": "Kalikot" }
+  },
+  {
+    "model": "core.district",
+    "pk": 64,
+    "fields": { "province": 6, "name": "Dailekh" }
+  },
+  {
+    "model": "core.district",
+    "pk": 65,
+    "fields": { "province": 6, "name": "Jajarkot" }
+  },
+  {
+    "model": "core.district",
+    "pk": 66,
+    "fields": { "province": 6, "name": "Rukum West" }
+  },
+  {
+    "model": "core.district",
+    "pk": 67,
+    "fields": { "province": 6, "name": "Salyan" }
+  },
+  {
+    "model": "core.district",
+    "pk": 68,
+    "fields": { "province": 6, "name": "Surkhet" }
+  },
+
+  {
+    "model": "core.district",
+    "pk": 69,
+    "fields": { "province": 7, "name": "Bajura" }
+  },
+  {
+    "model": "core.district",
+    "pk": 70,
+    "fields": { "province": 7, "name": "Bajhang" }
+  },
+  {
+    "model": "core.district",
+    "pk": 71,
+    "fields": { "province": 7, "name": "Achham" }
+  },
+  {
+    "model": "core.district",
+    "pk": 72,
+    "fields": { "province": 7, "name": "Doti" }
+  },
+  {
+    "model": "core.district",
+    "pk": 73,
+    "fields": { "province": 7, "name": "Kailali" }
+  },
+  {
+    "model": "core.district",
+    "pk": 74,
+    "fields": { "province": 7, "name": "Kanchanpur" }
+  },
+  {
+    "model": "core.district",
+    "pk": 75,
+    "fields": { "province": 7, "name": "Dadeldhura" }
+  },
+  {
+    "model": "core.district",
+    "pk": 76,
+    "fields": { "province": 7, "name": "Baitadi" }
+  },
+  {
+    "model": "core.district",
+    "pk": 77,
+    "fields": { "province": 7, "name": "Darchula" }
+  }
+]
