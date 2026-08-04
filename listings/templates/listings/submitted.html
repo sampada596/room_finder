@@ -1,0 +1,12 @@
+{% extends "core/base.html" %}
+{% block title %}Listing Submitted{% endblock %}
+{% block content %}
+<div style="max-width:520px;margin:60px auto;text-align:center;">
+    <div style="font-size:56px;margin-bottom:16px;">✅</div>
+    <h2 style="font-size:24px;font-weight:800;color:var(--text-primary);margin-bottom:12px;">Listing Submitted!</h2>
+    <p style="color:var(--text-secondary);font-size:15px;line-height:1.6;margin-bottom:28px;">
+        Your listing has been sent for admin review. You'll be notified once it's approved or rejected.
+    </p>
+    <a href="{% url 'landlord_dashboard' %}" class="btn btn-primary px-4 py-2" style="text-decoration:none;">Go to My Listings</a>
+</div>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "core/base.html" %}
+{% block title %}Complete Your Profile — Basera{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-wrapper { min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 40px 16px; }
+    .auth-card {
+        background: white; border: 1px solid var(--sage-border); border-radius: 16px;
+        padding: 40px; width: 100%; max-width: 440px; box-shadow: 0 4px 24px rgba(107, 143, 113, 0.1);
+    }
+    .auth-header { text-align: center; margin-bottom: 24px; }
+    .auth-header .icon { font-size: 36px; margin-bottom: 10px; }
+    .auth-header h2 { font-size: 22px; font-weight: 800; color: var(--text-primary); margin-bottom: 6px; }
+    .auth-header p { color: var(--text-secondary); font-size: 14px; }
+    .auth-header strong { color: var(--text-primary); }
+
+    .role-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .role-option {
+        border: 1.5px solid var(--sage-border); border-radius: 10px; padding: 16px; text-align: center; cursor: pointer;
+    }
+    .role-option input { display: none; }
+    .role-option .role-icon { font-size: 24px; margin-bottom: 6px; display: block; }
+    .role-option span.role-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .role-option:has(input:checked) { border-color: var(--sage); background: var(--sage-light); }
+
+    .auth-form label {
+        display: block; font-size: 13px; font-weight: 600; color: var(--text-primary);
+        margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .auth-form input[type="text"], .auth-form input[type="tel"] {
+        width: 100%; padding: 11px 14px; border: 1.5px solid var(--sage-border); border-radius: 8px;
+        font-size: 14px; color: var(--text-primary); background: white; margin-bottom: 20px; box-sizing: border-box;
+    }
+    .submit-btn {
+        width: 100%; padding: 13px; background: var(--sage); color: white; border: none;
+        border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;
+    }
+    .submit-btn:hover { background: var(--sage-dark); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="icon">👋</div>
+            <h2>Almost there, {{ pending.first_name }}</h2>
+            <p>Signed in as <strong>{{ pending.email }}</strong> — just need a couple more details</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} mb-3" style="font-size:14px;">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+
+            <label>I am a...</label>
+            <div class="role-options">
+                <label class="role-option">
+                    <input type="radio" name="role" value="tenant" checked>
+                    <span class="role-icon">🔍</span>
+                    <span class="role-name">Tenant</span>
+                </label>
+                <label class="role-option">
+                    <input type="radio" name="role" value="landlord">
+                    <span class="role-icon">🏠</span>
+                    <span class="role-name">Landlord</span>
+                </label>
+            </div>
+
+            <label>Phone Number</label>
+            <input type="tel" name="phone" required placeholder="98XXXXXXXX">
+
+            <button type="submit" class="submit-btn">Complete Sign Up</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

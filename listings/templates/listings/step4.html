@@ -1,0 +1,27 @@
+{% extends "listings/wizard_base.html" %}
+{% block title %}Post a Room — Step 4{% endblock %}
+{% block step_content %}
+<h2>Facilities</h2>
+<p class="wizard-subtitle">Select everything available at the property</p>
+<form method="post" class="wizard-form">
+    {% csrf_token %}
+    <div class="checkbox-grid">
+        <label>{{ form.car_parking }} Car Parking</label>
+        <label>{{ form.bike_parking }} Bike Parking</label>
+        <label>{{ form.wifi }} WiFi</label>
+        <label>{{ form.drinking_water }} Drinking Water</label>
+        <label>{{ form.water_24_7 }} 24/7 Water Supply</label>
+        <label>{{ form.attached_bathroom }} Attached Bathroom</label>
+        <label>{{ form.balcony }} Balcony</label>
+        <label>{{ form.furnished }} Furnished</label>
+        <label>{{ form.cctv }} CCTV</label>
+        <label>{{ form.security_guard }} Security Guard</label>
+        <label>{{ form.pet_allowed }} Pets Allowed</label>
+        <label>{{ form.laundry }} Laundry</label>
+    </div>
+    <div class="wizard-nav">
+        <a href="{% url 'listing_step3' %}" class="btn-wizard-back">← Back</a>
+        <button type="submit" class="btn-wizard-next">Next: Photos & Docs →</button>
+    </div>
+</form>
+{% endblock %}

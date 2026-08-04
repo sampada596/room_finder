@@ -1,0 +1,102 @@
+{% extends "core/base.html" %}
+{% block title %}Verify Email — Basera{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-wrapper { min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 40px 16px; }
+    .auth-card {
+        background: white; border: 1px solid var(--sage-border); border-radius: 16px;
+        padding: 40px; width: 100%; max-width: 440px; box-shadow: 0 4px 24px rgba(107, 143, 113, 0.1);
+    }
+    .auth-header { text-align: center; margin-bottom: 28px; }
+    .auth-header .icon { font-size: 36px; margin-bottom: 10px; }
+    .auth-header h2 { font-size: 22px; font-weight: 800; color: var(--text-primary); margin-bottom: 6px; }
+    .auth-header p { color: var(--text-secondary); font-size: 14px; }
+    .auth-header strong { color: var(--text-primary); }
+
+    .otp-code-input {
+        width: 100%; padding: 14px; font-size: 22px; text-align: center;
+        border: 1.5px solid var(--sage-border); border-radius: 8px;
+        letter-spacing: 10px; font-weight: 700; color: var(--text-primary);
+        margin-bottom: 20px; box-sizing: border-box;
+    }
+    .otp-code-input:focus {
+        outline: none; border-color: var(--sage); box-shadow: 0 0 0 3px rgba(107, 143, 113, 0.12);
+    }
+    .submit-btn {
+        width: 100%; padding: 13px; background: var(--sage); color: white; border: none;
+        border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s;
+    }
+    .submit-btn:hover { background: var(--sage-dark); }
+    .auth-footer { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text-secondary); }
+    .resend-link {
+        color: var(--sage); font-weight: 600; text-decoration: none; background: none; border: none;
+        cursor: pointer; font-size: 14px; padding: 0;
+    }
+    .resend-link:hover { color: var(--sage-dark); }
+    .resend-link:disabled { color: var(--text-secondary); cursor: not-allowed; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="icon">✉️</div>
+            <h2>Verify your email</h2>
+            <p>We sent a 6-digit code to <strong>{{ email }}</strong></p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} mb-3" style="font-size:14px;">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="code" maxlength="6" required
+                   placeholder="000000" class="otp-code-input" autofocus>
+            <button type="submit" class="submit-btn">Verify</button>
+        </form>
+
+        <div class="auth-footer" id="resend-wrapper">
+            Didn't get a code?
+            <form method="post" action="{% url 'resend_otp' %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="resend-link" id="resend-btn">Resend Code</button>
+            </form>
+            <span id="resend-timer" style="display:none;"></span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    
+    const resendBtn = document.getElementById("resend-btn");
+    const resendTimer = document.getElementById("resend-timer");
+
+    function startCooldown(seconds) {
+        resendBtn.style.display = "none";
+        resendTimer.style.display = "inline";
+        let remaining = seconds;
+        resendTimer.textContent = `Resend available in ${remaining}s`;
+        const interval = setInterval(() => {
+            remaining -= 1;
+            if (remaining <= 0) {
+                clearInterval(interval);
+                resendTimer.style.display = "none";
+                resendBtn.style.display = "inline";
+            } else {
+                resendTimer.textContent = `Resend available in ${remaining}s`;
+            }
+        }, 1000);
+    }
+
+    document.querySelector('#resend-wrapper form').addEventListener('submit', function () {
+        startCooldown(30);
+    });
+</script>
+{% endblock %}

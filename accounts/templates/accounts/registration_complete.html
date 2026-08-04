@@ -1,0 +1,9 @@
+{% extends "core/base.html" %}
+{% block title %}Account Verified — Basera{% endblock %}
+{% block content %}
+<div style="max-width:400px; margin:40px auto; background:white; padding:32px; border-radius:8px; text-align:center;">
+    <h2 style="color:#27ae60; margin-bottom:12px;">✓ Account Verified!</h2>
+    <p style="color:#666; margin-bottom:24px;">Your email has been verified successfully.</p>
+    <a href="{% url 'login' %}" class="btn btn-primary">Login Now</a>
+</div>
+{% endblock %}

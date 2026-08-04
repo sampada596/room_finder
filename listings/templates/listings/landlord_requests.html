@@ -1,0 +1,106 @@
+{% extends "core/base.html" %}
+{% block title %}Rental Requests — Basera{% endblock %}
+
+{% block extra_css %}
+<style>
+    .req-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+    .req-stat { background: white; border: 1px solid var(--sage-border); border-radius: 10px; padding: 18px; text-align: center; }
+    .req-stat .num { font-size: 26px; font-weight: 800; }
+    .req-stat .lbl { font-size: 12px; color: var(--text-secondary); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
+
+    .req-filters { display: flex; gap: 8px; margin-bottom: 20px; }
+    .req-filter-btn {
+        padding: 7px 16px; border-radius: 20px; border: 1.5px solid var(--sage-border); background: white;
+        color: var(--text-secondary); font-size: 13px; font-weight: 600; text-decoration: none;
+    }
+    .req-filter-btn.active { background: var(--sage); border-color: var(--sage); color: white; }
+
+    .req-card {
+        background: white; border: 1px solid var(--sage-border); border-radius: 12px;
+        padding: 20px; margin-bottom: 14px; display: flex; gap: 16px; align-items: flex-start;
+    }
+    .req-avatar {
+        width: 44px; height: 44px; border-radius: 50%; background: var(--sage); color: white;
+        display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;
+    }
+    .req-body { flex: 1; }
+    .req-tenant-name { font-weight: 700; color: var(--text-primary); }
+    .req-listing-title { font-size: 13px; color: var(--sage-dark); margin-bottom: 6px; }
+    .req-message { font-size: 14px; color: var(--text-secondary); margin: 8px 0; line-height: 1.5; }
+    .req-meta { font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; }
+    .req-actions { display: flex; gap: 8px; }
+    .req-actions button {
+        padding: 7px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; border: none; cursor: pointer;
+    }
+    .btn-accept { background: var(--sage); color: white; }
+    .btn-accept:hover { background: var(--sage-dark); }
+    .btn-decline { background: white; border: 1.5px solid var(--sage-border) !important; color: var(--text-secondary); }
+    .btn-decline:hover { background: #fdf3f3; color: #dc3545; }
+    .req-badge { font-size: 12px; padding: 4px 10px; border-radius: 12px; font-weight: 600; }
+    .req-badge.pending { background: #fff3cd; color: #856404; }
+    .req-badge.accepted { background: #d4edda; color: #155724; }
+    .req-badge.declined { background: #f8d7da; color: #721c24; }
+
+    .req-empty { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 style="font-size:24px; margin-bottom:24px; color:var(--text-primary);">Rental Requests</h1>
+
+<div class="req-stats">
+    <div class="req-stat"><div class="num" style="color:#856404;">{{ pending_count }}</div><div class="lbl">Pending</div></div>
+    <div class="req-stat"><div class="num" style="color:var(--sage-dark);">{{ accepted_count }}</div><div class="lbl">Accepted</div></div>
+    <div class="req-stat"><div class="num" style="color:#721c24;">{{ declined_count }}</div><div class="lbl">Declined</div></div>
+</div>
+
+<div class="req-filters">
+    <a href="{% url 'landlord_requests' %}" class="req-filter-btn {% if not status_filter %}active{% endif %}">All</a>
+    <a href="?status=pending" class="req-filter-btn {% if status_filter == 'pending' %}active{% endif %}">Pending</a>
+    <a href="?status=accepted" class="req-filter-btn {% if status_filter == 'accepted' %}active{% endif %}">Accepted</a>
+    <a href="?status=declined" class="req-filter-btn {% if status_filter == 'declined' %}active{% endif %}">Declined</a>
+</div>
+
+{% if requests %}
+    {% for req in requests %}
+    <div class="req-card">
+        <div class="req-avatar">{{ req.tenant.first_name|first|upper }}</div>
+        <div class="req-body">
+            <div class="req-tenant-name">{{ req.tenant.first_name }} {{ req.tenant.last_name }}</div>
+            <div class="req-listing-title">
+                <a href="{% url 'listing_detail' req.listing.id %}" style="color:var(--sage-dark);">{{ req.listing.title }}</a>
+            </div>
+            <div class="req-meta">{{ req.tenant.email }} · {{ req.tenant.phone }} · Requested {{ req.created_at|date:"M j, Y" }}</div>
+            {% if req.message %}
+                <div class="req-message">"{{ req.message }}"</div>
+            {% endif %}
+
+            {% if req.status == "pending" %}
+                <div class="req-actions">
+                    <form method="post" action="{% url 'respond_to_request' req.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="accept">
+                        <button type="submit" class="btn-accept">✓ Accept</button>
+                    </form>
+                    <form method="post" action="{% url 'respond_to_request' req.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="decline">
+                        <button type="submit" class="btn-decline">✗ Decline</button>
+                    </form>
+                </div>
+            {% else %}
+                <span class="req-badge {{ req.status }}">
+                    {% if req.status == "accepted" %}✓ Accepted{% else %}✗ Declined{% endif %}
+                </span>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="req-empty">
+        <p style="font-size:40px; margin-bottom:12px;">📭</p>
+        <h3 style="color:var(--text-primary); margin-bottom:6px;">No requests here yet</h3>
+        <p>When tenants request to rent your rooms, they'll show up here.</p>
+    </div>
+{% endif %}
+{% endblock %}

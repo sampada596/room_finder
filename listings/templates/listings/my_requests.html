@@ -1,0 +1,57 @@
+{% extends "core/base.html" %}
+{% block title %}My Requests — Basera{% endblock %}
+
+{% block extra_css %}
+<style>
+    .mr-card {
+        background: white; border: 1px solid var(--sage-border); border-radius: 12px;
+        padding: 16px; margin-bottom: 14px; display: flex; gap: 16px; align-items: center;
+    }
+    .mr-card img { width: 90px; height: 70px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+    .mr-noimg {
+        width: 90px; height: 70px; border-radius: 8px; background: var(--sage-light); flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 11px;
+    }
+    .mr-body { flex: 1; }
+    .mr-title { font-weight: 700; color: var(--text-primary); }
+    .mr-title a { color: var(--text-primary); text-decoration: none; }
+    .mr-meta { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+    .mr-badge { font-size: 12px; padding: 4px 12px; border-radius: 12px; font-weight: 600; white-space: nowrap; }
+    .mr-badge.pending { background: #fff3cd; color: #856404; }
+    .mr-badge.accepted { background: #d4edda; color: #155724; }
+    .mr-badge.declined { background: #f8d7da; color: #721c24; }
+    .mr-empty { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 style="font-size:24px; margin-bottom:24px; color:var(--text-primary);">My Requests</h1>
+
+{% if requests %}
+    {% for req in requests %}
+    <div class="mr-card">
+        {% if req.listing.images.all %}
+            <img src="{{ req.listing.images.all.0.image.url }}" alt="{{ req.listing.title }}">
+        {% else %}
+            <div class="mr-noimg">No photo</div>
+        {% endif %}
+        <div class="mr-body">
+            <div class="mr-title"><a href="{% url 'listing_detail' req.listing.id %}">{{ req.listing.title }}</a></div>
+            <div class="mr-meta">📍 {{ req.listing.district.name }}{% if req.listing.city %}, {{ req.listing.city }}{% endif %} · Requested {{ req.created_at|date:"M j, Y" }}</div>
+        </div>
+        <span class="mr-badge {{ req.status }}">
+            {% if req.status == "pending" %}⏳ Pending{% endif %}
+            {% if req.status == "accepted" %}✓ Accepted{% endif %}
+            {% if req.status == "declined" %}✗ Declined{% endif %}
+        </span>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="mr-empty">
+        <p style="font-size:40px; margin-bottom:12px;">🏠</p>
+        <h3 style="color:var(--text-primary); margin-bottom:6px;">No requests yet</h3>
+        <p>Rooms you request to rent will show up here with their status.</p>
+        <a href="{% url 'home' %}" class="btn btn-primary mt-3">Browse Rooms</a>
+    </div>
+{% endif %}
+{% endblock %}

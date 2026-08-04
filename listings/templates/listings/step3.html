@@ -1,0 +1,14 @@
+{% extends "listings/wizard_base.html" %}
+{% block title %}Post a Room — Step 3{% endblock %}
+{% block step_content %}
+<h2>Pricing & Availability</h2>
+<p class="wizard-subtitle">Set the rent, deposit, and what's included</p>
+<form method="post" class="wizard-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="wizard-nav">
+        <a href="{% url 'listing_step2' %}" class="btn-wizard-back">← Back</a>
+        <button type="submit" class="btn-wizard-next">Next: Facilities →</button>
+    </div>
+</form>
+{% endblock %}

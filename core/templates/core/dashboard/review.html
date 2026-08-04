@@ -1,0 +1,131 @@
+{% extends "core/dashboard/base_dashboard.html" %}
+{% block title %}Review Listing — Dashboard{% endblock %}
+{% block dashboard_content %}
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <h1 style="font-size:22px;">Review: {{ listing.title }}</h1>
+    <a href="{% url 'dashboard_pending' %}" style="color:#3498db; font-size:14px;">← Back to Pending</a>
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+
+    <!-- Listing Info -->
+    <div style="background:white; border-radius:8px; padding:24px;">
+        <h2 style="font-size:16px; margin-bottom:16px; border-bottom:2px solid #f0f0f0; padding-bottom:10px;">Listing Details</h2>
+
+        {% if listing.images.all %}
+            <img src="{{ listing.images.all.0.image.url }}" style="width:100%; height:200px; object-fit:cover; border-radius:6px; margin-bottom:16px;">
+        {% endif %}
+
+        <table style="width:100%; font-size:14px; border-collapse:collapse;">
+            <tr><td style="padding:6px 0; color:#666; width:40%;">Title</td><td style="padding:6px 0; font-weight:bold;">{{ listing.title }}</td></tr>
+            <tr><td style="padding:6px 0; color:#666;">Type</td><td style="padding:6px 0;">{{ listing.get_property_type_display }}</td></tr>
+            <tr><td style="padding:6px 0; color:#666;">Location</td><td style="padding:6px 0;">{{ listing.city }}, {{ listing.district.name }}, {{ listing.province.name }}</td></tr>
+            <tr><td style="padding:6px 0; color:#666;">Rent</td><td style="padding:6px 0; color:#e74c3c; font-weight:bold;">NPR {{ listing.monthly_rent|floatformat:0 }}/month</td></tr>
+            <tr><td style="padding:6px 0; color:#666;">Deposit</td><td style="padding:6px 0;">NPR {{ listing.security_deposit|floatformat:0 }}</td></tr>
+            <tr><td style="padding:6px 0; color:#666;">Ward</td><td style="padding:6px 0;">{{ listing.ward_number|default:"Not specified" }}</td></tr>
+            <tr><td style="padding:6px 0; color:#666;">Owner</td><td style="padding:6px 0;">{{ listing.owner.first_name }} {{ listing.owner.last_name }}<br><small style="color:#999;">{{ listing.owner.email }} · {{ listing.owner.phone }}</small></td></tr>
+            <tr><td style="padding:6px 0; color:#666;">Status</td><td style="padding:6px 0;">
+                {% if listing.status == "pending" %}
+                    <span style="background:#fff3cd; color:#856404; padding:3px 10px; border-radius:12px; font-size:12px;">Pending</span>
+                {% elif listing.status == "approved" %}
+                    <span style="background:#d4edda; color:#155724; padding:3px 10px; border-radius:12px; font-size:12px;">Approved</span>
+                {% else %}
+                    <span style="background:#f8d7da; color:#721c24; padding:3px 10px; border-radius:12px; font-size:12px;">Rejected</span>
+                {% endif %}
+            </td></tr>
+        </table>
+
+        <div style="margin-top:16px;">
+            <strong style="font-size:13px;">Description:</strong>
+            <p style="font-size:13px; color:#555; line-height:1.6; margin-top:6px;">{{ listing.description }}</p>
+        </div>
+
+        {% if listing.rejection_reason %}
+        <div style="margin-top:16px; background:#f8d7da; padding:12px; border-radius:4px;">
+            <strong style="font-size:13px; color:#721c24;">Rejection Reason:</strong>
+            <p style="font-size:13px; color:#721c24; margin-top:4px;">{{ listing.rejection_reason }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Documents -->
+    <div>
+        <div style="background:white; border-radius:8px; padding:24px; margin-bottom:20px;">
+            <h2 style="font-size:16px; margin-bottom:16px; border-bottom:2px solid #f0f0f0; padding-bottom:10px;">Verification Documents</h2>
+
+            {% if document %}
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+                    <div>
+                        <p style="font-size:12px; color:#666; margin-bottom:4px;">Citizenship Front</p>
+                        <a href="{{ document.citizenship_front.url }}" target="_blank">
+                            <img src="{{ document.citizenship_front.url }}" style="width:100%; height:110px; object-fit:cover; border-radius:4px; border:1px solid #ddd;">
+                        </a>
+                    </div>
+                    <div>
+                        <p style="font-size:12px; color:#666; margin-bottom:4px;">Citizenship Back</p>
+                        <a href="{{ document.citizenship_back.url }}" target="_blank">
+                            <img src="{{ document.citizenship_back.url }}" style="width:100%; height:110px; object-fit:cover; border-radius:4px; border:1px solid #ddd;">
+                        </a>
+                    </div>
+                    <div>
+                        <p style="font-size:12px; color:#666; margin-bottom:4px;">Lalpurja</p>
+                        <a href="{{ document.lalpurja.url }}" target="_blank">
+                            <img src="{{ document.lalpurja.url }}" style="width:100%; height:110px; object-fit:cover; border-radius:4px; border:1px solid #ddd;">
+                        </a>
+                    </div>
+                    <div>
+                        <p style="font-size:12px; color:#666; margin-bottom:4px;">Selfie with Citizenship</p>
+                        <a href="{{ document.selfie_with_citizenship.url }}" target="_blank">
+                            <img src="{{ document.selfie_with_citizenship.url }}" style="width:100%; height:110px; object-fit:cover; border-radius:4px; border:1px solid #ddd;">
+                        </a>
+                    </div>
+                </div>
+                <p style="font-size:12px; color:#999;">Click any image to open full size in new tab</p>
+            {% else %}
+                <p style="color:#999; font-size:14px;">No documents submitted yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Approve / Reject Forms -->
+        {% if listing.status == "pending" %}
+        <div style="background:white; border-radius:8px; padding:24px;">
+            <h2 style="font-size:16px; margin-bottom:16px; border-bottom:2px solid #f0f0f0; padding-bottom:10px;">Make a Decision</h2>
+
+            <!-- Approve -->
+            <form method="post" action="{% url 'dashboard_approve_listing' listing.id %}" style="margin-bottom:20px;">
+                {% csrf_token %}
+                <div style="margin-bottom:12px;">
+                    <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer;">
+                        <input type="checkbox" name="verified_owner" checked> Mark as Verified Owner
+                    </label>
+                    <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer; margin-top:8px;">
+                        <input type="checkbox" name="verified_property" checked> Mark as Verified Property
+                    </label>
+                </div>
+                <button type="submit" style="width:100%; padding:12px; background:#27ae60; color:white; border:none; border-radius:4px; font-size:15px; cursor:pointer;">
+                    ✓ Approve Listing
+                </button>
+            </form>
+
+            <!-- Reject -->
+            <form method="post" action="{% url 'dashboard_reject_listing' listing.id %}">
+                {% csrf_token %}
+                <textarea name="reason" placeholder="Rejection reason (required)..."
+                    style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; font-size:14px; height:80px; resize:vertical; margin-bottom:10px;"></textarea>
+                <button type="submit" style="width:100%; padding:12px; background:#e74c3c; color:white; border:none; border-radius:4px; font-size:15px; cursor:pointer;">
+                    ✗ Reject Listing
+                </button>
+            </form>
+        </div>
+        {% else %}
+        <div style="background:white; border-radius:8px; padding:24px;">
+            <p style="color:#666; font-size:14px; text-align:center;">
+                This listing has already been <strong>{{ listing.status }}</strong>.
+            </p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

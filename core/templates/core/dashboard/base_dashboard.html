@@ -1,0 +1,35 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div style="display:flex; gap:24px; align-items:flex-start;">
+
+    <!-- Sidebar -->
+    <div style="width:220px; flex-shrink:0;">
+        <div style="background:white; border-radius:8px; padding:16px;">
+            <h3 style="font-size:14px; color:#999; text-transform:uppercase; margin-bottom:16px;">Dashboard</h3>
+            <nav style="display:flex; flex-direction:column; gap:4px;">
+                <a href="{% url 'dashboard_home' %}" style="padding:10px 12px; border-radius:4px; text-decoration:none; color:#333; font-size:14px; {% if request.resolver_match.url_name == 'dashboard_home' %}background:#f0f0f0; font-weight:bold;{% endif %}">
+                    📊 Overview
+                </a>
+                <a href="{% url 'dashboard_pending' %}" style="padding:10px 12px; border-radius:4px; text-decoration:none; color:#333; font-size:14px; {% if request.resolver_match.url_name == 'dashboard_pending' %}background:#f0f0f0; font-weight:bold;{% endif %}">
+                    ⏳ Pending Listings
+                </a>
+                <a href="{% url 'dashboard_approved' %}" style="padding:10px 12px; border-radius:4px; text-decoration:none; color:#333; font-size:14px; {% if request.resolver_match.url_name == 'dashboard_approved' %}background:#f0f0f0; font-weight:bold;{% endif %}">
+                    ✅ Approved Listings
+                </a>
+                <a href="{% url 'dashboard_rejected' %}" style="padding:10px 12px; border-radius:4px; text-decoration:none; color:#333; font-size:14px; {% if request.resolver_match.url_name == 'dashboard_rejected' %}background:#f0f0f0; font-weight:bold;{% endif %}">
+                    ❌ Rejected Listings
+                </a>
+                <a href="{% url 'dashboard_users' %}" style="padding:10px 12px; border-radius:4px; text-decoration:none; color:#333; font-size:14px; {% if request.resolver_match.url_name == 'dashboard_users' %}background:#f0f0f0; font-weight:bold;{% endif %}">
+                    👥 User Management
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div style="flex:1; min-width:0;">
+        {% block dashboard_content %}{% endblock %}
+    </div>
+
+</div>
+{% endblock %}

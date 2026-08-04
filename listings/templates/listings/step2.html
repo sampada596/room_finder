@@ -1,0 +1,127 @@
+{% extends "listings/wizard_base.html" %}
+{% block title %}Post a Room — Step 2{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+    #location-map { height: 320px; border-radius: 10px; margin-bottom: 8px; border: 1.5px solid var(--sage-border); }
+    .map-hint { font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; }
+    .locate-btn {
+        display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; margin-bottom: 12px;
+        background: var(--sage-light); border: 1.5px solid var(--sage-border); border-radius: 8px;
+        color: var(--sage-dark); font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    .locate-btn:hover { background: var(--sage); color: white; }
+    .coord-display { font-size: 12px; color: var(--text-secondary); margin-bottom: 20px; }
+</style>
+{% endblock %}
+
+{% block step_content %}
+<h2>Location</h2>
+<p class="wizard-subtitle">Where is the property located?</p>
+
+<form method="post" class="wizard-form" id="location-form">
+    {% csrf_token %}
+
+    {{ form.province.label_tag }} {{ form.province }}
+    {{ form.province.errors }}
+
+    {{ form.district.label_tag }} {{ form.district }}
+    {{ form.district.errors }}
+
+    {{ form.city.label_tag }} {{ form.city }}
+    {{ form.city.errors }}
+
+    {{ form.area.label_tag }} {{ form.area }}
+    {{ form.area.errors }}
+
+    {{ form.ward_number.label_tag }} {{ form.ward_number }}
+    {{ form.ward_number.errors }}
+
+    {{ form.address.label_tag }} {{ form.address }}
+    {{ form.address.errors }}
+
+    <label>Pin the Property Location</label>
+    <button type="button" class="locate-btn" onclick="useMyLocation()">📍 Use My Current Location</button>
+    <div id="location-map"></div>
+    <p class="map-hint">Click anywhere on the map to drop a pin, or drag the pin to adjust. This helps tenants find your property.</p>
+    <p class="coord-display" id="coord-display">No location selected yet</p>
+
+    {{ form.latitude }}
+    {{ form.longitude }}
+
+    <div class="wizard-nav">
+        <a href="{% url 'listing_step1' %}" class="btn-wizard-back">← Back</a>
+        <button type="submit" class="btn-wizard-next">Next: Pricing →</button>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    {% if form.latitude.value and form.longitude.value %}
+        const defaultLat = {{ form.latitude.value }};
+        const defaultLng = {{ form.longitude.value }};
+        const hasExisting = true;
+    {% else %}
+        const defaultLat = 27.7172;
+        const defaultLng = 85.3240;
+        const hasExisting = false;
+    {% endif %}
+
+    const map = L.map('location-map').setView([defaultLat, defaultLng], hasExisting ? 15 : 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19
+    }).addTo(map);
+
+    let marker = null;
+    const latInput = document.getElementById('id_latitude');
+    const lngInput = document.getElementById('id_longitude');
+    const coordDisplay = document.getElementById('coord-display');
+
+    function setMarker(lat, lng) {
+        if (marker) {
+            marker.setLatLng([lat, lng]);
+        } else {
+            marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+            marker.on('dragend', function (e) {
+                const pos = marker.getLatLng();
+                updateCoords(pos.lat, pos.lng);
+            });
+        }
+        updateCoords(lat, lng);
+    }
+
+    function updateCoords(lat, lng) {
+        latInput.value = lat.toFixed(6);
+        lngInput.value = lng.toFixed(6);
+        coordDisplay.textContent = `📍 Selected: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+    }
+
+    if (hasExisting) {
+        setMarker(defaultLat, defaultLng);
+    }
+
+    map.on('click', function (e) {
+        setMarker(e.latlng.lat, e.latlng.lng);
+    });
+
+    function useMyLocation() {
+        if (!navigator.geolocation) {
+            alert("Your browser doesn't support location access.");
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(function (position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            map.setView([lat, lng], 16);
+            setMarker(lat, lng);
+        }, function () {
+            alert("Couldn't get your location. Please click on the map instead.");
+        });
+    }
+</script>
+{% endblock %}

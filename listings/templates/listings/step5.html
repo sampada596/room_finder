@@ -1,0 +1,34 @@
+{% extends "listings/wizard_base.html" %}
+{% block title %}Post a Room — Step 5{% endblock %}
+{% block step_content %}
+<h2>Photos & Verification</h2>
+<p class="wizard-subtitle">Upload property photos and your verification documents</p>
+<form method="post" enctype="multipart/form-data" class="wizard-form">
+    {% csrf_token %}
+
+    <div class="section-divider" style="margin-top:0; padding-top:0; border-top:none;">
+        <h3>📷 Property Photos</h3>
+        <p>Upload 3–15 clear photos (JPG or PNG, max 5MB each)</p>
+    </div>
+
+    {% if image_error %}
+        <div class="image-error">{{ image_error }}</div>
+    {% endif %}
+
+    <div class="upload-box">
+        <input type="file" name="images" multiple accept="image/jpeg,image/png">
+    </div>
+
+    <div class="section-divider">
+        <h3>🪪 Verification Documents</h3>
+        <p>Required once — used to verify you as a landlord</p>
+    </div>
+
+    {{ doc_form.as_p }}
+
+    <div class="wizard-nav">
+        <a href="{% url 'listing_step4' %}" class="btn-wizard-back">← Back</a>
+        <button type="submit" class="btn-wizard-next">Submit Listing ✓</button>
+    </div>
+</form>
+{% endblock %}

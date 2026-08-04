@@ -1,0 +1,167 @@
+{% extends "core/base.html" %}
+{% block title %}Register — Basera{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-wrapper {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 16px;
+    }
+    .auth-card {
+        background: white;
+        border: 1px solid #e2ebe3;
+        border-radius: 16px;
+        padding: 40px;
+        width: 100%;
+        max-width: 480px;
+        box-shadow: 0 4px 24px rgba(107, 143, 113, 0.1);
+    }
+    .auth-header {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+    .auth-header .icon {
+        font-size: 40px;
+        margin-bottom: 12px;
+    }
+    .auth-header h2 {
+        font-size: 24px;
+        font-weight: 800;
+        color: #1a2e1b;
+        margin-bottom: 6px;
+    }
+    .auth-header p {
+        color: #6b7c6c;
+        font-size: 14px;
+    }
+
+    /* Override Django's default form rendering */
+    .register-form p {
+        margin-bottom: 16px;
+    }
+    .register-form label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #1a2e1b;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .register-form input {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1.5px solid #e2ebe3;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #1a2e1b;
+        background: white;
+        transition: border-color 0.2s;
+        box-sizing: border-box;
+    }
+    .register-form input:focus {
+        outline: none;
+        border-color: #6b8f71;
+        box-shadow: 0 0 0 3px rgba(107, 143, 113, 0.12);
+    }
+    .register-form .helptext {
+        font-size: 12px;
+        color: #6b7c6c;
+        margin-top: 4px;
+        display: block;
+    }
+    .register-form ul {
+        font-size: 12px;
+        color: #6b7c6c;
+        padding-left: 16px;
+        margin-top: 4px;
+    }
+    .register-form .errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 6px 0 0;
+    }
+    .register-form .errorlist li {
+        font-size: 12px;
+        color: #dc3545;
+        background: #fff5f5;
+        padding: 6px 10px;
+        border-radius: 4px;
+        border-left: 3px solid #dc3545;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 13px;
+        background: #6b8f71;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-top: 8px;
+    }
+    .submit-btn:hover { background: #557a5b; }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #6b7c6c;
+    }
+    .auth-footer a {
+        color: #6b8f71;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .auth-footer a:hover { color: #557a5b; }
+
+    .role-note {
+        background: #f0f4f0;
+        border: 1px solid #e2ebe3;
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 13px;
+        color: #6b7c6c;
+        margin-bottom: 24px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="icon">🏠</div>
+            <h2>Create an Account</h2>
+            <p>Join Basera today</p>
+        </div>
+
+        <div class="role-note">
+            📋 Registering as a <strong>Tenant</strong> — landlords can update their role after registration
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger mb-3" style="font-size:14px;">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" class="register-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="submit-btn">Create Account</button>
+        </form>
+
+        <div class="auth-footer">
+            Already have an account? <a href="{% url 'login' %}">Login here</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
