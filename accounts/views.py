@@ -99,7 +99,9 @@ def login_view(request):
                 messages.error(request, "Please verify your email before logging in.")
                 return redirect("login")
             login(request, user)
-            return redirect("listing_step1")
+            if user.role == "landlord":
+                return redirect("landlord_dashboard")
+            return redirect("home")
         else:
             messages.error(request, "Invalid email or password.")
     return render(request, "accounts/login.html", {})
