@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path("", views.home, name="home"),
+    path("rooms/", views.browse_rooms, name="browse_rooms"),
     path("ajax/districts/", views.get_districts, name="get_districts"),
     path("dashboard/", views.dashboard_home, name="dashboard_home"),
     path("dashboard/listings/pending/", views.dashboard_pending, name="dashboard_pending"),

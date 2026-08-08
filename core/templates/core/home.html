@@ -1,94 +1,77 @@
 {% extends "core/base.html" %}
 {% load static %}
-{% block title %}Find Rooms in Nepal — Room Finder{% endblock %}
+{% block title %}Basera — Find Rooms in Nepal{% endblock %}
 
 {% block extra_css %}
 <style>
     /* ── Hero ── */
     .hero {
+        position: relative;
         background:
-        linear-gradient(180deg, rgba(26,46,27,0.35) 0%, rgba(26,46,27,0.55) 100%),
-        url("{% static 'images/hero-bg.jpg' %}") center/cover no-repeat;
+            linear-gradient(180deg, rgba(26,46,27,0.35) 0%, rgba(26,46,27,0.55) 100%),
+            url("{% static 'images/hero-bg.jpg' %}") center/cover no-repeat;
         margin: -24px -24px 0;
-        padding: 64px 24px 56px;
+        padding: 110px 24px 100px;
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         border-radius: 0 0 20px 20px;
         text-align: center;
-                 
+        overflow: hidden;
     }
-    .hero-inner { max-width: 720px; margin: 0 auto; }
+    .hero-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
     .hero h1 {
-        color: white;
-        font-size: 34px;
-        font-weight: 800;
-        margin-bottom: 12px;
-        line-height: 1.25;
+        color: white; font-size: 34px; font-weight: 800; margin-bottom: 12px; line-height: 1.3;
+        opacity: 0; animation: heroFadeUp 0.7s ease forwards;
     }
+    .hero-city { display: inline-block; min-width: 1px; color: #d9f2db; position: relative; }
+    .hero-city::after { content: "|"; margin-left: 2px; animation: blink 1s step-end infinite; opacity: 0.7; }
     .hero-subtext {
-        color: #e4f0e5;
-        font-size: 16px;
-        margin-bottom: 28px;
+        color: #e4f0e5; font-size: 16px; margin-bottom: 28px;
+        opacity: 0; animation: heroFadeUp 0.7s ease 0.15s forwards;
     }
     .hero-search {
-        display: flex;
-        gap: 8px;
-        max-width: 600px;
-        margin: 0 auto 20px;
+        display: flex; gap: 8px; max-width: 600px; margin: 0 auto 20px;
+        opacity: 0; animation: heroFadeUp 0.7s ease 0.3s forwards;
     }
     .hero-search input {
-        flex: 1;
-        padding: 13px 16px;
-        border: none;
-        border-radius: 8px;
-        font-size: 15px;
-        background: white;
-        color: var(--text-primary);
+        flex: 1; padding: 13px 16px; border: none; border-radius: 8px;
+        font-size: 15px; background: white; color: var(--text-primary); transition: box-shadow 0.2s;
     }
-    .hero-search input:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
-    }
+    .hero-search input:focus { outline: none; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4); }
     .hero-search button {
-        padding: 13px 26px;
-        background: var(--text-primary);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 15px;
-        font-weight: 700;
+        padding: 13px 26px; background: var(--text-primary); color: white; border: none;
+        border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 700; transition: background 0.2s, transform 0.15s;
     }
     .hero-search button:hover { background: #0d1a0e; }
-    .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .hero-search button:active { transform: scale(0.96); }
+    .hero-ctas {
+        display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+        opacity: 0; animation: heroFadeUp 0.7s ease 0.45s forwards;
+    }
     .btn-hero-primary, .btn-hero-secondary {
-        padding: 12px 26px;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 700;
-        text-decoration: none;
-        display: inline-block;
+        padding: 12px 26px; border-radius: 8px; font-size: 14px; font-weight: 700;
+        text-decoration: none; display: inline-block; transition: transform 0.15s, background 0.2s;
     }
     .btn-hero-primary { background: white; color: var(--sage-dark); }
-    .btn-hero-primary:hover { background: #eef5ef; color: var(--sage-dark); }
+    .btn-hero-primary:hover { background: #eef5ef; color: var(--sage-dark); transform: translateY(-2px); }
     .btn-hero-secondary { background: rgba(255,255,255,0.12); color: white; border: 1.5px solid rgba(255,255,255,0.5); }
-    .btn-hero-secondary:hover { background: rgba(255,255,255,0.22); color: white; }
+    .btn-hero-secondary:hover { background: rgba(255,255,255,0.22); color: white; transform: translateY(-2px); }
+
+    @keyframes heroFadeUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes blink { 50% { opacity: 0; } }
 
     /* ── Stats bar ── */
-    .stats-bar {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 16px;
-        margin: -30px 0 40px;
-        position: relative;
-        z-index: 2;
-    }
+    .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: -30px 0 40px; position: relative; z-index: 2; }
     .stat-item {
-        background: white;
-        border: 1px solid var(--sage-border);
-        border-radius: 12px;
-        padding: 20px 12px;
-        text-align: center;
-        box-shadow: 0 4px 16px rgba(107, 143, 113, 0.1);
+        background: white; border: 1px solid var(--sage-border); border-radius: 12px; padding: 20px 12px;
+        text-align: center; box-shadow: 0 4px 16px rgba(107, 143, 113, 0.1); transition: transform 0.2s;
     }
+    .stat-item:hover { transform: translateY(-3px); }
     .stat-number { font-size: 24px; font-weight: 800; color: var(--sage-dark); }
     .stat-label { font-size: 12px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; margin-top: 4px; }
 
@@ -100,15 +83,8 @@
     .how-it-works { margin-bottom: 56px; }
     .hiw-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 28px; }
     .hiw-tab {
-        padding: 10px 22px;
-        border-radius: 24px;
-        border: 1.5px solid var(--sage-border);
-        background: white;
-        color: var(--text-secondary);
-        font-weight: 600;
-        font-size: 14px;
-        cursor: pointer;
-        transition: all 0.2s;
+        padding: 10px 22px; border-radius: 24px; border: 1.5px solid var(--sage-border);
+        background: white; color: var(--text-secondary); font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;
     }
     .hiw-tab.active { background: var(--sage); border-color: var(--sage); color: white; }
     .hiw-panel { display: none; }
@@ -122,19 +98,9 @@
     /* ── Browse section ── */
     .browse-section { margin-bottom: 56px; }
     .search-filters-card {
-        background: var(--sage-light);
-        padding: 24px;
-        border-radius: 14px;
-        border: 1px solid var(--sage-border);
-        margin-bottom: 28px;
+        background: var(--sage-light); padding: 24px; border-radius: 14px; border: 1px solid var(--sage-border); margin-bottom: 28px;
     }
-    .filters {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        align-items: flex-end;
-        margin-top: 16px;
-    }
+    .filters { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-top: 16px; }
     .filter-group { display: flex; flex-direction: column; gap: 4px; }
     .filter-group label { font-size: 12px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
     .filter-group select, .filter-group input {
@@ -201,28 +167,45 @@
     }
     .btn-contact-submit:hover { background: var(--sage-dark); }
 
-    @media (max-width: 800px) {
-        .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    
+    @media (max-width: 640px) {
+        .hero { padding: 44px 18px 48px; margin: -16px -16px 0; border-radius: 0 0 16px 16px; }
+        .hero h1 { font-size: 24px; }
+        .hero-subtext { font-size: 14px; margin-bottom: 22px; }
+        .hero-search { flex-direction: column; }
+        .hero-search button { width: 100%; }
+        .hero-ctas { flex-direction: column; align-items: stretch; }
+        .btn-hero-primary, .btn-hero-secondary { text-align: center; }
+        .stats-bar { grid-template-columns: repeat(2, 1fr); margin-top: -20px; gap: 10px; }
+        .stat-item { padding: 14px 8px; }
+        .stat-number { font-size: 19px; }
+        .stat-label { font-size: 10px; }
         .hiw-steps { grid-template-columns: 1fr; }
         .why-grid { grid-template-columns: repeat(2, 1fr); }
         .contact-grid { grid-template-columns: 1fr; }
+    }
+    @media (min-width: 641px) and (max-width: 900px) {
+        .hero h1 { font-size: 28px; }
+        .stats-bar { grid-template-columns: repeat(2, 1fr); }
+        .hiw-steps { grid-template-columns: 1fr; }
+        .why-grid { grid-template-columns: repeat(2, 1fr); }
     }
 </style>
 {% endblock %}
 
 {% block content %}
 
-<!-- 1. Hero -->
+
 <section class="hero">
     <div class="hero-inner">
-        <h1>Find Your Perfect Room, Anywhere in Nepal </h1>
-        <p class="hero-subtext">Nepal's trusted platform connecting verified landlords with tenants — from Kathmandu to Pokhara and beyond.</p>
+        <h1>Find Your Perfect Room in <span class="hero-city" id="hero-city">Pokhara</span> 🇳🇵</h1>
+        <p class="hero-subtext">Nepal's trusted platform connecting verified landlords with tenants.</p>
         <form method="get" action="{% url 'home' %}#browse" class="hero-search">
             <input type="text" name="q" value="{{ query }}" placeholder="Search by location, area, or title...">
             <button type="submit">Search</button>
         </form>
         <div class="hero-ctas">
-            <a href="#browse" class="btn-hero-primary">Browse Rooms</a>
+            <a href="{% url 'browse_rooms' %}" class="btn-hero-primary">Browse Rooms</a>
             {% if request.user.is_authenticated and request.user.role == "landlord" %}
                 <a href="{% url 'listing_step1' %}" class="btn-hero-secondary">Post a Room</a>
             {% else %}
@@ -232,27 +215,27 @@
     </div>
 </section>
 
-<!-- 2. Stats -->
+
 <section class="stats-bar">
     <div class="stat-item">
-        <div class="stat-number">{{ total_listings_all }}+</div>
+        <div class="stat-number" data-count="{{ total_listings_all }}">0+</div>
         <div class="stat-label">Active Listings</div>
     </div>
     <div class="stat-item">
-        <div class="stat-number">{{ total_districts }}</div>
+        <div class="stat-number" data-count="{{ total_districts }}">0</div>
         <div class="stat-label">Districts Covered</div>
     </div>
     <div class="stat-item">
-        <div class="stat-number">{{ verified_landlords }}+</div>
+        <div class="stat-number" data-count="{{ verified_landlords }}">0+</div>
         <div class="stat-label">Verified Landlords</div>
     </div>
     <div class="stat-item">
-        <div class="stat-number">{{ total_tenants }}+</div>
+        <div class="stat-number" data-count="{{ total_tenants }}">0+</div>
         <div class="stat-label">Trusted by Tenants</div>
     </div>
 </section>
 
-<!-- 3. How it works -->
+
 <section class="how-it-works" id="how-it-works">
     <h2 class="section-title">How It Works</h2>
     <p class="section-subtitle">Whether you're looking for a room or renting one out</p>
@@ -303,7 +286,7 @@
     </div>
 </section>
 
-<!-- 4. Browse Listings -->
+
 <section class="browse-section" id="browse">
     <h2 class="section-title">Browse Listings</h2>
     <p class="section-subtitle">Search and filter rooms across Nepal</p>
@@ -430,7 +413,7 @@
     {% endif %}
 </section>
 
-<!-- 5. Why Choose Us -->
+
 <section class="why-us" id="why-us">
     <h2 class="section-title">Why Choose Basera</h2>
     <p class="section-subtitle">Built specifically for the Nepali rental market</p>
@@ -458,7 +441,7 @@
     </div>
 </section>
 
-<!-- 6. Contact -->
+
 <section class="contact-section" id="contact">
     <h2 class="section-title">Get in Touch</h2>
     <p class="section-subtitle">Have a question or found an issue? We'd love to hear from you.</p>
@@ -518,7 +501,7 @@
             });
     });
 
-    // How it works tabs
+    
     document.querySelectorAll('.hiw-tab').forEach(tab => {
         tab.addEventListener('click', function () {
             document.querySelectorAll('.hiw-tab').forEach(t => t.classList.remove('active'));
@@ -528,11 +511,42 @@
         });
     });
 
-    // Contact form
+    // Contact form (front-end only for now — no backend wired up yet)
     document.getElementById('contact-form').addEventListener('submit', function (e) {
         e.preventDefault();
         alert('Thanks for reaching out! (This form isn\'t connected to email yet — let me know if you want that wired up.)');
         this.reset();
+    });
+
+    
+    const cities = ["Kathmandu", "Pokhara", "Biratnagar", "Chitwan", "Lalitpur"];
+    let cityIndex = 0;
+    const cityEl = document.getElementById("hero-city");
+    if (cityEl) {
+        setInterval(() => {
+            cityIndex = (cityIndex + 1) % cities.length;
+            cityEl.style.opacity = 0;
+            setTimeout(() => {
+                cityEl.textContent = cities[cityIndex];
+                cityEl.style.opacity = 1;
+            }, 250);
+        }, 2500);
+    }
+
+   
+    document.querySelectorAll(".stat-number").forEach(el => {
+        const target = parseInt(el.dataset.count, 10) || 0;
+        const suffix = el.textContent.includes("+") ? "+" : "";
+        let current = 0;
+        const step = Math.max(1, Math.ceil(target / 40));
+        const timer = setInterval(() => {
+            current += step;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            el.textContent = current + suffix;
+        }, 25);
     });
 </script>
 {% endblock %}

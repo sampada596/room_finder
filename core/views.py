@@ -230,3 +230,62 @@ def dashboard_toggle_user(request, pk):
     status = "activated" if user.is_active else "deactivated"
     messages.success(request, f"User {user.email} has been {status}.")
     return redirect("dashboard_users")
+
+def browse_rooms(request):
+    listings = Listing.objects.filter(status="approved").select_related(
+        "province", "district", "facilities"
+    ).prefetch_related("images")
+
+    query = request.GET.get("q", "")
+    if query:
+        listings = listings.filter(
+            Q(title__icontains=query) |
+            Q(city__icontains=query) |
+            Q(area__icontains=query) |
+            Q(description__icontains=query)
+        )
+
+    province_id = request.GET.get("province", "")
+    district_id = request.GET.get("district", "")
+    property_type = request.GET.get("property_type", "")
+    min_price = request.GET.get("min_price", "")
+    max_price = request.GET.get("max_price", "")
+
+    if province_id:
+        listings = listings.filter(province_id=province_id)
+    if district_id:
+        listings = listings.filter(district_id=district_id)
+    if property_type:
+        listings = listings.filter(property_type=property_type)
+    if min_price:
+        listings = listings.filter(monthly_rent__gte=min_price)
+    if max_price:
+        listings = listings.filter(monthly_rent__lte=max_price)
+
+    sort = request.GET.get("sort", "latest")
+    if sort == "price_low":
+        listings = listings.order_by("monthly_rent")
+    elif sort == "price_high":
+        listings = listings.order_by("-monthly_rent")
+    else:
+        listings = listings.order_by("-created_at")
+
+    provinces = Province.objects.all()
+    districts = District.objects.filter(
+        province_id=province_id
+    ) if province_id else District.objects.none()
+
+    context = {
+        "listings": listings,
+        "provinces": provinces,
+        "districts": districts,
+        "query": query,
+        "selected_province": province_id,
+        "selected_district": district_id,
+        "selected_property_type": property_type,
+        "min_price": min_price,
+        "max_price": max_price,
+        "sort": sort,
+        "property_types": Listing.PROPERTY_TYPE_CHOICES,
+    }
+    return render(request, "core/browse.html", context)
