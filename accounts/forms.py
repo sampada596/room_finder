@@ -7,6 +7,11 @@ class RegistrationForm(forms.Form):
     last_name = forms.CharField(min_length=2, max_length=100)
     email = forms.EmailField()
     phone = forms.CharField(max_length=20)
+    role = forms.ChoiceField(
+        choices=[("tenant", "Tenant"), ("landlord", "Landlord")],
+        widget=forms.RadioSelect,
+        initial="tenant"
+    )
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
 

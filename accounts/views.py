@@ -20,6 +20,7 @@ def register_view(request):
                 first_name=data["first_name"],
                 last_name=data["last_name"],
                 phone=data["phone"],
+                role=data["role"],
             )
             user.is_active = False
             user.save()

@@ -121,16 +121,21 @@
     }
     .auth-footer a:hover { color: #557a5b; }
 
-    .role-note {
-        background: #f0f4f0;
-        border: 1px solid #e2ebe3;
-        border-radius: 8px;
-        padding: 12px 16px;
-        font-size: 13px;
-        color: #6b7c6c;
-        margin-bottom: 24px;
-        text-align: center;
+    .role-select-group { margin-bottom: 24px; }
+    .role-select-label {
+        display: block; font-size: 13px; font-weight: 600; color: #1a2e1b;
+        margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;
     }
+    .role-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .role-option {
+        border: 1.5px solid #e2ebe3; border-radius: 10px; padding: 14px; text-align: center;
+        cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .role-option input { display: none; }
+    .role-option .role-icon { font-size: 22px; }
+    .role-option .role-name { font-size: 14px; font-weight: 700; color: #1a2e1b; }
+    .role-option .role-desc { font-size: 11px; color: #6b7c6c; }
+    .role-option:has(input:checked) { border-color: #6b8f71; background: #f0f4f0; }
 </style>
 {% endblock %}
 
@@ -143,8 +148,22 @@
             <p>Join Basera today</p>
         </div>
 
-        <div class="role-note">
-            📋 Registering as a <strong>Tenant</strong> — landlords can update their role after registration
+        <div class="role-select-group">
+            <label class="role-select-label">I am registering as a...</label>
+            <div class="role-options">
+                <label class="role-option">
+                    <input type="radio" name="role" value="tenant" checked>
+                    <span class="role-icon">🔍</span>
+                    <span class="role-name">Tenant</span>
+                    <span class="role-desc">Looking for a room</span>
+                </label>
+                <label class="role-option">
+                    <input type="radio" name="role" value="landlord">
+                    <span class="role-icon">🏠</span>
+                    <span class="role-name">Landlord</span>
+                    <span class="role-desc">Renting out a room</span>
+                </label>
+            </div>
         </div>
 
         {% if messages %}
@@ -155,7 +174,12 @@
 
         <form method="post" class="register-form">
             {% csrf_token %}
-            {{ form.as_p }}
+            {{ form.first_name.as_field_group }}
+            {{ form.last_name.as_field_group }}
+            {{ form.email.as_field_group }}
+            {{ form.phone.as_field_group }}
+            {{ form.password.as_field_group }}
+            {{ form.confirm_password.as_field_group }}
             <button type="submit" class="submit-btn">Create Account</button>
         </form>
 
