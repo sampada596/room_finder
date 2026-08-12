@@ -44,9 +44,17 @@
 
     <label>Pin the Property Location</label>
     <button type="button" class="locate-btn" onclick="useMyLocation()">📍 Use My Current Location</button>
+    <label>Pin the Property Location</label>
+    <div style="display:flex; gap:8px; margin-bottom:10px;">
+        <input type="text" id="location-search" placeholder="Search for an address or area (e.g. Baneshwor, Kathmandu)"
+            style="flex:1; padding:9px 12px; border:1.5px solid var(--sage-border); border-radius:8px; font-size:14px;">
+        <button type="button" class="locate-btn" onclick="searchLocation()" style="white-space:nowrap;">🔍 Search</button>
+    </div>
+    <button type="button" class="locate-btn" onclick="useMyLocation()">📍 Use My Current Location</button>
     <div id="location-map"></div>
-    <p class="map-hint">Click anywhere on the map to drop a pin, or drag the pin to adjust. This helps tenants find your property.</p>
+    <p class="map-hint">Search for your address, or click/drag the pin to fine-tune the exact spot.</p>
     <p class="coord-display" id="coord-display">No location selected yet</p>
+    
 
     {{ form.latitude }}
     {{ form.longitude }}
@@ -123,5 +131,36 @@
             alert("Couldn't get your location. Please click on the map instead.");
         });
     }
+    function searchLocation() {
+        const query = document.getElementById('location-search').value.trim();
+        if (!query) return;
+
+   
+        const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=np&q=${encodeURIComponent(query)}`;
+
+        fetch(url, { headers: { 'Accept-Language': 'en' } })
+            .then(response => response.json())
+            .then(results => {
+                if (results.length === 0) {
+                    alert("Couldn't find that location. Try a more specific address, or click the map directly.");
+                    return;
+                }
+                const lat = parseFloat(results[0].lat);
+                const lng = parseFloat(results[0].lon);
+                map.setView([lat, lng], 16);
+                setMarker(lat, lng);
+            })
+            .catch(() => {
+                alert("Search failed — check your internet connection, or click the map directly.");
+            });
+    }
+
+
+    document.getElementById('location-search').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            searchLocation();
+        }
+    });
 </script>
 {% endblock %}

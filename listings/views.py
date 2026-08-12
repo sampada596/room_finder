@@ -18,9 +18,6 @@ def landlord_required(view_func):
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect("login")
-        if request.user.role != "landlord":
-            messages.error(request, "Only landlords can access this page.")
-            return redirect("login")
         return view_func(request, *args, **kwargs)
     return wrapper
 
@@ -286,8 +283,7 @@ def report_listing(request, pk):
 def landlord_dashboard(request):
     if not request.user.is_authenticated:
         return redirect("login")
-    if request.user.role != "landlord":
-        return redirect("home")
+   
 
     listings = Listing.objects.filter(
         owner=request.user
@@ -308,10 +304,6 @@ def landlord_dashboard(request):
 @login_required
 def request_to_rent(request, pk):
     listing = get_object_or_404(Listing, pk=pk, status="approved")
-
-    if request.user.role != "tenant":
-        messages.error(request, "Only tenants can request to rent a room.")
-        return redirect("listing_detail", pk=pk)
 
     if listing.owner_id == request.user.id:
         messages.error(request, "You can't request your own listing.")
@@ -334,10 +326,7 @@ def request_to_rent(request, pk):
 
 @login_required
 def landlord_requests(request):
-    if request.user.role != "landlord":
-        messages.error(request, "Only landlords can view rental requests.")
-        return redirect("home")
-
+    
     status_filter = request.GET.get("status", "")
     requests_qs = RentalRequest.objects.filter(
         listing__owner=request.user
@@ -380,10 +369,7 @@ def respond_to_request(request, pk):
 
 @login_required
 def my_requests(request):
-    if request.user.role != "tenant":
-        messages.error(request, "Only tenants can view their rental requests.")
-        return redirect("home")
-
+    
     requests_qs = RentalRequest.objects.filter(
         tenant=request.user
     ).select_related("listing", "listing__district").prefetch_related("listing__images").order_by("-created_at")

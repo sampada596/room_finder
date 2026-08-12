@@ -4,7 +4,7 @@ from django.db.models import Q, Count
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from functools import wraps
-from .models import District, Province
+from .models import Province, District, ContactMessage
 from listings.models import Listing, Document
 from accounts.models import User
 
@@ -289,3 +289,17 @@ def browse_rooms(request):
         "property_types": Listing.PROPERTY_TYPE_CHOICES,
     }
     return render(request, "core/browse.html", context)
+
+def contact_submit(request):
+    if request.method == "POST":
+        name = request.POST.get("name", "").strip()
+        email = request.POST.get("email", "").strip()
+        message = request.POST.get("message", "").strip()
+
+        if name and email and message:
+            ContactMessage.objects.create(name=name, email=email, message=message)
+            messages.success(request, "Thanks for reaching out! We'll get back to you soon.")
+        else:
+            messages.error(request, "Please fill in all fields.")
+
+    return redirect(request.META.get("HTTP_REFERER", "home") + "#contact")

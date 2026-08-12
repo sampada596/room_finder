@@ -14,5 +14,6 @@ urlpatterns = [
     path("dashboard/listing/<uuid:pk>/reject/", views.dashboard_reject_listing, name="dashboard_reject_listing"),
     path("dashboard/users/", views.dashboard_users, name="dashboard_users"),
     path("dashboard/users/<uuid:pk>/toggle/", views.dashboard_toggle_user, name="dashboard_toggle_user"),
+    path("contact/submit/", views.contact_submit, name="contact_submit"),
 
 ]

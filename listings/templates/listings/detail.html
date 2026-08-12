@@ -124,7 +124,7 @@
     </div>
 
     <<!-- Action Buttons -->
-    {% if request.user.is_authenticated and request.user.role == "tenant" %}
+    {% if request.user.is_authenticated %}
     <div style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; align-items:center;">
         <button id="fav-btn" onclick="toggleFavorite()"
             style="padding:10px 20px; border:2px solid #e74c3c; border-radius:4px; background:white; color:#e74c3c; cursor:pointer; font-size:14px;">
