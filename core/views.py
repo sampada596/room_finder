@@ -68,8 +68,8 @@ def home(request):
         "total_listings_all": Listing.objects.filter(status="approved").count(),
         "total_districts": District.objects.count(),
         "verified_landlords": User.objects.filter(
-            role="landlord", documents__verification_status="approved"
-        ).count(),
+            listings__isnull=False, documents__verification_status="approved"
+        ).distinct().count(),
         "total_tenants": User.objects.filter(role="tenant").count(),
     }
     return render(request, "core/home.html", context)
