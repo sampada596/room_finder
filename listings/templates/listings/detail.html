@@ -3,171 +3,204 @@
 
 {% block extra_css %}
 <style>
-    .detail-container { max-width: 900px; margin: 0 auto; }
-
-    .map-embed-wrapper { border-radius: 8px; overflow: hidden; margin-bottom: 10px; }
-    .map-directions-link {
-        display: inline-block; font-size: 13px; color: #2c7be5; text-decoration: none; font-weight: 600;
+    .detail-layout {
+        display: grid;
+        grid-template-columns: 1.6fr 1fr;
+        gap: 28px;
+        align-items: start;
     }
-    .map-directions-link:hover { text-decoration: underline; }
 
-    /* Image Gallery */
-    .gallery { margin-bottom: 28px; }
-    .gallery .main-image { width: 100%; height: 420px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
+    /* Gallery */
+    .gallery { margin-bottom: 20px; }
+    .gallery .main-image {
+        width: 100%; height: 420px; object-fit: cover; border-radius: 14px; margin-bottom: 10px;
+        border: 1px solid var(--sage-border);
+    }
     .gallery .thumbnails { display: flex; gap: 8px; flex-wrap: wrap; }
-    .gallery .thumbnails img { width: 80px; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer; opacity: 0.7; border: 2px solid transparent; }
-    .gallery .thumbnails img.active { opacity: 1; border-color: #e74c3c; }
-    .no-image-placeholder { width: 100%; height: 420px; background: #ecf0f1; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 18px; margin-bottom: 28px; }
+    .gallery .thumbnails img {
+        width: 84px; height: 62px; object-fit: cover; border-radius: 8px; cursor: pointer;
+        opacity: 0.65; border: 2px solid transparent; transition: opacity 0.15s, border-color 0.15s;
+    }
+    .gallery .thumbnails img:hover { opacity: 0.9; }
+    .gallery .thumbnails img.active { opacity: 1; border-color: var(--sage); }
+    .no-image-placeholder {
+        width: 100%; height: 420px; background: var(--sage-light); border-radius: 14px;
+        display: flex; align-items: center; justify-content: center; color: var(--text-secondary);
+        font-size: 16px; margin-bottom: 20px; border: 1px solid var(--sage-border);
+    }
 
     /* Trust Badges */
-    .trust-badges { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-    .badge { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; }
-    .badge-owner { background: #d4edda; color: #155724; }
-    .badge-property { background: #cce5ff; color: #004085; }
+    .trust-badges { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .badge { padding: 6px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 700; }
+    .badge-owner { background: #e8f1e9; color: var(--sage-dark); }
+    .badge-property { background: #dceaf5; color: #1d5a8a; }
     .badge-pending { background: #fff3cd; color: #856404; }
 
-    
+    /* Header */
+    .listing-header h1 { font-size: 25px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+    .listing-location { color: var(--text-secondary); font-size: 14px; margin-bottom: 4px; }
 
-    /* Main Info */
-    .listing-header { margin-bottom: 20px; }
-    .listing-header h1 { font-size: 26px; margin-bottom: 8px; }
-    .listing-location { color: #666; font-size: 15px; margin-bottom: 12px; }
-    .listing-price { font-size: 28px; font-weight: bold; color: #e74c3c; margin-bottom: 4px; }
-    .listing-price-details { font-size: 13px; color: #666; }
+    /* Action row */
+    .action-row { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+    .btn-fav {
+        padding: 10px 18px; border: 1.5px solid var(--sage-border); border-radius: 8px; background: white;
+        color: var(--text-secondary); cursor: pointer; font-size: 13.5px; font-weight: 600; transition: all 0.15s;
+    }
+    .btn-fav:hover { border-color: var(--sage); color: var(--sage-dark); }
+    .btn-fav.active { background: var(--sage-light); border-color: var(--sage); color: var(--sage-dark); }
+    .btn-report {
+        padding: 10px 18px; border: 1.5px solid var(--sage-border); border-radius: 8px; background: white;
+        color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 600; transition: all 0.15s;
+    }
+    .btn-report:hover { border-color: #dc3545; color: #dc3545; }
 
     /* Sections */
-    .section { background: white; border-radius: 8px; padding: 24px; margin-bottom: 20px; }
-    .section h2 { font-size: 18px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
+    .section {
+        background: white; border-radius: 14px; padding: 24px; margin-bottom: 18px;
+        border: 1px solid var(--sage-border);
+    }
+    .section h2 {
+        font-size: 17px; font-weight: 800; color: var(--text-primary); margin-bottom: 14px;
+        padding-bottom: 10px; border-bottom: 1px solid var(--sage-light);
+    }
+    .section p.body-text { line-height: 1.7; color: var(--text-secondary); font-size: 14.5px; }
 
     /* Facilities */
-    .facilities-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-    .facility-chip { background: #f0f0f0; padding: 6px 14px; border-radius: 20px; font-size: 13px; color: #444; }
-    .facility-chip.available { background: #d4edda; color: #155724; }
+    .facilities-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .facility-chip {
+        display: flex; align-items: center; gap: 8px; background: var(--sage-light);
+        padding: 8px 12px; border-radius: 8px; font-size: 13px; color: var(--text-secondary);
+    }
+    .facility-chip.available { color: var(--sage-dark); font-weight: 600; }
+    .facility-chip .fc-icon { font-size: 13px; }
 
-    /* Owner Info */
-    .owner-info { display: flex; align-items: center; gap: 16px; }
-    .owner-avatar { width: 56px; height: 56px; border-radius: 50%; background: #2c3e50; display: flex; align-items: center; justify-content: center; color: white; font-size: 22px; font-weight: bold; }
-    .owner-name { font-size: 16px; font-weight: bold; margin-bottom: 4px; }
-    .phone-container { margin-top: 16px; }
-    .masked-phone { font-size: 20px; font-weight: bold; letter-spacing: 2px; color: #333; }
-    .reveal-btn { margin-top: 10px; padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
-    .reveal-btn:hover { background: #c0392b; }
-    .ad-overlay { background: #222; color: white; padding: 20px; border-radius: 8px; margin-top: 12px; text-align: center; }
-    .ad-timer { font-size: 32px; font-weight: bold; color: #e74c3c; margin: 10px 0; }
+    /* Map */
+    .map-embed-wrapper { border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+    .map-directions-link { display: inline-block; font-size: 13px; color: var(--sage-dark); text-decoration: none; font-weight: 600; }
+    .map-directions-link:hover { text-decoration: underline; }
 
-    /* Ad Banner */
-    .ad-banner { background: #f0f0f0; border: 1px dashed #ccc; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 20px; color: #999; font-size: 13px; }
+    /* ── Sticky sidebar ── */
+    .sidebar { position: sticky; top: 20px; }
+    .price-card {
+        background: white; border-radius: 14px; padding: 24px; margin-bottom: 18px;
+        border: 1px solid var(--sage-border); box-shadow: 0 4px 20px rgba(107, 143, 113, 0.08);
+    }
+    .listing-price { font-size: 28px; font-weight: 800; color: var(--sage-dark); margin-bottom: 4px; }
+    .listing-price span { font-size: 14px; font-weight: 600; color: var(--text-secondary); }
+    .price-detail-row {
+        display: flex; justify-content: space-between; padding: 8px 0; font-size: 13.5px;
+        border-bottom: 1px solid var(--sage-light); color: var(--text-secondary);
+    }
+    .price-detail-row:last-child { border-bottom: none; }
+    .price-detail-row strong { color: var(--text-primary); }
 
     .request-btn {
-        padding: 10px 20px; border: none; border-radius: 4px; background: #27ae60;
-        color: white; cursor: pointer; font-size: 14px; font-weight: bold;
+        width: 100%; padding: 13px; border: none; border-radius: 10px; background: var(--sage);
+        color: white; cursor: pointer; font-size: 14.5px; font-weight: 700; margin-top: 16px; transition: background 0.15s;
     }
-    .request-btn:hover { background: #1e8449; }
+    .request-btn:hover { background: var(--sage-dark); }
     .request-status {
-        padding: 10px 18px; border-radius: 4px; font-size: 14px; font-weight: bold; display: inline-block;
+        display: block; width: 100%; text-align: center; padding: 12px; border-radius: 10px;
+        font-size: 14px; font-weight: 700; margin-top: 16px; box-sizing: border-box;
     }
     .request-status.pending { background: #fff3cd; color: #856404; }
-    .request-status.accepted { background: #d4edda; color: #155724; }
+    .request-status.accepted { background: #e8f1e9; color: var(--sage-dark); }
     .request-status.declined { background: #f8d7da; color: #721c24; }
+
+    /* Owner card */
+    .owner-card { background: white; border-radius: 14px; padding: 22px; border: 1px solid var(--sage-border); }
+    .owner-info { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+    .owner-avatar {
+        width: 52px; height: 52px; border-radius: 50%; background: var(--sage); flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; font-weight: 700;
+    }
+    .owner-name { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
+    .owner-role { color: var(--text-secondary); font-size: 12.5px; }
+
+    .phone-container { border-top: 1px solid var(--sage-light); padding-top: 16px; }
+    .masked-phone {
+        font-size: 18px; font-weight: 700; letter-spacing: 1px; color: var(--text-primary);
+        display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    }
+    .reveal-btn {
+        width: 100%; padding: 11px; background: white; color: var(--sage-dark); border: 1.5px solid var(--sage);
+        border-radius: 8px; cursor: pointer; font-size: 13.5px; font-weight: 700; transition: background 0.15s;
+    }
+    .reveal-btn:hover { background: var(--sage-light); }
+    .ad-overlay { background: #1a2e1b; color: white; padding: 20px; border-radius: 10px; margin-top: 12px; text-align: center; }
+    .ad-timer { font-size: 30px; font-weight: 800; color: white; margin: 8px 0; }
+    .login-prompt { color: var(--text-secondary); font-size: 13.5px; margin-top: 8px; }
+    .login-prompt a { color: var(--sage-dark); font-weight: 600; }
+
+    /* Ad Banner */
+    .ad-banner {
+        background: var(--sage-light); border: 1px dashed #b5ceb8; padding: 18px; text-align: center;
+        border-radius: 10px; margin-bottom: 18px; color: var(--text-secondary); font-size: 13px;
+    }
+
+    /* Request Modal */
     .request-modal-backdrop {
-        display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000;
+        display: none; position: fixed; inset: 0; background: rgba(20,30,20,0.55); z-index: 1000;
         align-items: center; justify-content: center;
     }
-    .request-modal {
-        background: white; border-radius: 10px; padding: 28px; max-width: 440px; width: 90%;
-    }
-    .request-modal h3 { margin-bottom: 6px; }
-    .request-modal p { color: #666; font-size: 13px; margin-bottom: 16px; }
+    .request-modal { background: white; border-radius: 14px; padding: 28px; max-width: 440px; width: 90%; }
+    .request-modal h3 { font-size: 18px; font-weight: 800; color: var(--text-primary); margin-bottom: 6px; }
+    .request-modal p { color: var(--text-secondary); font-size: 13px; margin-bottom: 16px; }
     .request-modal textarea {
-        width: 100%; min-height: 100px; padding: 12px; border: 1px solid #ddd; border-radius: 6px;
+        width: 100%; min-height: 100px; padding: 12px; border: 1.5px solid var(--sage-border); border-radius: 8px;
         font-family: inherit; font-size: 14px; margin-bottom: 16px; box-sizing: border-box; resize: vertical;
     }
+    .request-modal textarea:focus { outline: none; border-color: var(--sage); box-shadow: 0 0 0 3px rgba(107,143,113,0.12); }
     .request-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
-    .request-modal-actions button { padding: 9px 18px; border-radius: 4px; font-size: 14px; cursor: pointer; border: none; }
-    .request-modal-cancel { background: #f0f0f0; color: #444; }
-    .request-modal-submit { background: #27ae60; color: white; font-weight: bold; }
+    .request-modal-actions button { padding: 10px 18px; border-radius: 8px; font-size: 14px; cursor: pointer; border: none; font-weight: 600; }
+    .request-modal-cancel { background: var(--sage-light); color: var(--text-secondary); }
+    .request-modal-submit { background: var(--sage); color: white; }
+    .request-modal-submit:hover { background: var(--sage-dark); }
+
+    @media (max-width: 860px) {
+        .detail-layout { grid-template-columns: 1fr; }
+        .sidebar { position: static; }
+        .facilities-grid { grid-template-columns: 1fr; }
+    }
 </style>
 {% endblock %}
 
-
 {% block content %}
-<div class="detail-container">
+<div class="detail-layout">
 
-    <!-- Image Gallery -->
-    {% if listing.images.all %}
-        <div class="gallery">
-            <img src="{{ listing.images.all.0.image.url }}" alt="{{ listing.title }}" class="main-image" id="main-image">
-            <div class="thumbnails">
-                {% for image in listing.images.all %}
-                    <img src="{{ image.image.url }}"
-                         alt="Photo {{ forloop.counter }}"
-                         onclick="document.getElementById('main-image').src=this.src; document.querySelectorAll('.thumbnails img').forEach(i=>i.classList.remove('active')); this.classList.add('active');"
-                         {% if forloop.first %}class="active"{% endif %}>
-                {% endfor %}
-            </div>
-        </div>
-    {% else %}
-        <div class="no-image-placeholder">No images available</div>
-    {% endif %}
-
-    <!-- Trust Badges -->
-    <div class="trust-badges">
-        {% if listing.verified_owner %}
-            <span class="badge badge-owner">✓ Verified Owner</span>
-        {% endif %}
-        {% if listing.verified_property %}
-            <span class="badge badge-property">✓ Verified Property</span>
-        {% endif %}
-        {% if not listing.verified_owner and not listing.verified_property %}
-            <span class="badge badge-pending">⏳ Verification Pending</span>
-        {% endif %}
-    </div>
-
-    <<!-- Action Buttons -->
-    {% if request.user.is_authenticated %}
-    <div style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; align-items:center;">
-        <button id="fav-btn" onclick="toggleFavorite()"
-            style="padding:10px 20px; border:2px solid #e74c3c; border-radius:4px; background:white; color:#e74c3c; cursor:pointer; font-size:14px;">
-            ♡ Save to Favorites
-        </button>
-
-        {% if existing_request %}
-            <span class="request-status {{ existing_request.status }}">
-                {% if existing_request.status == "pending" %}⏳ Request Pending{% endif %}
-                {% if existing_request.status == "accepted" %}✓ Request Accepted{% endif %}
-                {% if existing_request.status == "declined" %}✗ Request Declined{% endif %}
-            </span>
-        {% else %}
-            <button class="request-btn" onclick="document.getElementById('request-modal-backdrop').style.display='flex'">
-                🏠 Request to Rent
-            </button>
-        {% endif %}
-
-        <a href="{% url 'report_listing' listing.id %}"
-            style="padding:10px 20px; border:2px solid #999; border-radius:4px; background:white; color:#666; text-decoration:none; font-size:14px;">
-            ⚑ Report Listing
-        </a>
-    </div>
-
-    <!-- Request to Rent Modal -->
-    <div class="request-modal-backdrop" id="request-modal-backdrop">
-        <div class="request-modal">
-            <h3>Request to Rent</h3>
-            <p>Send a message to the landlord — mention your move-in date, number of people, or any questions.</p>
-            <form method="post" action="{% url 'request_to_rent' listing.id %}">
-                {% csrf_token %}
-                <textarea name="message" placeholder="Hi, I'm interested in this room. I'd like to move in around..."></textarea>
-                <div class="request-modal-actions">
-                    <button type="button" class="request-modal-cancel" onclick="document.getElementById('request-modal-backdrop').style.display='none'">Cancel</button>
-                    <button type="submit" class="request-modal-submit">Send Request</button>
+    <!-- LEFT COLUMN -->
+    <div>
+        <!-- Gallery -->
+        {% if listing.images.all %}
+            <div class="gallery">
+                <img src="{{ listing.images.all.0.image.url }}" alt="{{ listing.title }}" class="main-image" id="main-image">
+                <div class="thumbnails">
+                    {% for image in listing.images.all %}
+                        <img src="{{ image.image.url }}"
+                             alt="Photo {{ forloop.counter }}"
+                             onclick="document.getElementById('main-image').src=this.src; document.querySelectorAll('.thumbnails img').forEach(i=>i.classList.remove('active')); this.classList.add('active');"
+                             {% if forloop.first %}class="active"{% endif %}>
+                    {% endfor %}
                 </div>
-            </form>
-        </div>
-    </div>
-    {% endif %}
+            </div>
+        {% else %}
+            <div class="no-image-placeholder">📷 No images available</div>
+        {% endif %}
 
-    <!-- Header -->
-    <div class="section">
+        <!-- Trust Badges -->
+        <div class="trust-badges">
+            {% if listing.verified_owner %}
+                <span class="badge badge-owner">✓ Verified Owner</span>
+            {% endif %}
+            {% if listing.verified_property %}
+                <span class="badge badge-property">✓ Verified Property</span>
+            {% endif %}
+            {% if not listing.verified_owner and not listing.verified_property %}
+                <span class="badge badge-pending">⏳ Verification Pending</span>
+            {% endif %}
+        </div>
+
+        <!-- Header -->
         <div class="listing-header">
             <h1>{{ listing.title }}</h1>
             <div class="listing-location">
@@ -175,150 +208,169 @@
                 {{ listing.district.name }}, {{ listing.province.name }}
                 {% if listing.ward_number %} — Ward {{ listing.ward_number }}{% endif %}
             </div>
-            <div class="listing-price">NPR {{ listing.monthly_rent|floatformat:0 }}/month</div>
-            <div class="listing-price-details">
-                Security Deposit: NPR {{ listing.security_deposit|floatformat:0 }}
+        </div>
+
+        <!-- Action Buttons -->
+        {% if request.user.is_authenticated %}
+        <div class="action-row">
+            <button id="fav-btn" class="btn-fav" onclick="toggleFavorite()">♡ Save to Favorites</button>
+            <a href="{% url 'report_listing' listing.id %}" class="btn-report">⚑ Report Listing</a>
+        </div>
+        {% endif %}
+
+        <!-- Ad Banner -->
+        <div class="ad-banner">📢 Advertisement — Google AdSense Banner</div>
+
+        <!-- Description -->
+        <div class="section">
+            <h2>Description</h2>
+            <p class="body-text">{{ listing.description }}</p>
+            <div style="margin-top:16px; font-size:13.5px; color:var(--text-secondary);">
+                <strong style="color:var(--text-primary);">Property Type:</strong> {{ listing.get_property_type_display }}<br>
+                {% if listing.available_date %}
+                    <strong style="color:var(--text-primary);">Available From:</strong> {{ listing.available_date|date:"F j, Y" }}
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Facilities -->
+        {% if facilities %}
+        <div class="section">
+            <h2>Facilities</h2>
+            <div class="facilities-grid">
+                <span class="facility-chip {% if facilities.wifi %}available{% endif %}"><span class="fc-icon">{% if facilities.wifi %}✓{% else %}✗{% endif %}</span> WiFi</span>
+                <span class="facility-chip {% if facilities.car_parking %}available{% endif %}"><span class="fc-icon">{% if facilities.car_parking %}✓{% else %}✗{% endif %}</span> Car Parking</span>
+                <span class="facility-chip {% if facilities.bike_parking %}available{% endif %}"><span class="fc-icon">{% if facilities.bike_parking %}✓{% else %}✗{% endif %}</span> Bike Parking</span>
+                <span class="facility-chip {% if facilities.attached_bathroom %}available{% endif %}"><span class="fc-icon">{% if facilities.attached_bathroom %}✓{% else %}✗{% endif %}</span> Attached Bathroom</span>
+                <span class="facility-chip {% if facilities.drinking_water %}available{% endif %}"><span class="fc-icon">{% if facilities.drinking_water %}✓{% else %}✗{% endif %}</span> Drinking Water</span>
+                <span class="facility-chip {% if facilities.water_24_7 %}available{% endif %}"><span class="fc-icon">{% if facilities.water_24_7 %}✓{% else %}✗{% endif %}</span> 24/7 Water</span>
+                <span class="facility-chip {% if facilities.furnished %}available{% endif %}"><span class="fc-icon">{% if facilities.furnished %}✓{% else %}✗{% endif %}</span> Furnished</span>
+                <span class="facility-chip {% if facilities.balcony %}available{% endif %}"><span class="fc-icon">{% if facilities.balcony %}✓{% else %}✗{% endif %}</span> Balcony</span>
+                <span class="facility-chip {% if facilities.cctv %}available{% endif %}"><span class="fc-icon">{% if facilities.cctv %}✓{% else %}✗{% endif %}</span> CCTV</span>
+                <span class="facility-chip {% if facilities.security_guard %}available{% endif %}"><span class="fc-icon">{% if facilities.security_guard %}✓{% else %}✗{% endif %}</span> Security Guard</span>
+                <span class="facility-chip {% if facilities.pet_allowed %}available{% endif %}"><span class="fc-icon">{% if facilities.pet_allowed %}✓{% else %}✗{% endif %}</span> Pet Allowed</span>
+                <span class="facility-chip {% if facilities.laundry %}available{% endif %}"><span class="fc-icon">{% if facilities.laundry %}✓{% else %}✗{% endif %}</span> Laundry</span>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- House Rules -->
+        {% if listing.house_rules %}
+        <div class="section">
+            <h2>House Rules</h2>
+            <p class="body-text">{{ listing.house_rules }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Map -->
+        {% if listing.latitude and listing.longitude %}
+        <div class="section">
+            <h2>Location on Map</h2>
+            <div class="map-embed-wrapper">
+                <iframe
+                    width="100%"
+                    height="300"
+                    style="border:0;"
+                    loading="lazy"
+                    allowfullscreen
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="https://maps.google.com/maps?q={{ listing.latitude }},{{ listing.longitude }}&z=15&output=embed">
+                </iframe>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ listing.latitude }},{{ listing.longitude }}"
+               target="_blank" rel="noopener" class="map-directions-link">
+                🧭 Get Directions on Google Maps
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- RIGHT COLUMN (sticky) -->
+    <div class="sidebar">
+        <div class="price-card">
+            <div class="listing-price">NPR {{ listing.monthly_rent|floatformat:0 }} <span>/ month</span></div>
+            <div style="margin-top:14px;">
+                <div class="price-detail-row"><span>Security Deposit</span> <strong>NPR {{ listing.security_deposit|floatformat:0 }}</strong></div>
                 {% if listing.bills_water or listing.bills_electricity or listing.bills_internet %}
-                    &nbsp;·&nbsp; Bills included:
-                    {% if listing.bills_water %}Water {% endif %}
-                    {% if listing.bills_electricity %}Electricity {% endif %}
-                    {% if listing.bills_internet %}Internet{% endif %}
+                <div class="price-detail-row">
+                    <span>Bills Included</span>
+                    <strong>
+                        {% if listing.bills_water %}Water {% endif %}
+                        {% if listing.bills_electricity %}Electricity {% endif %}
+                        {% if listing.bills_internet %}Internet{% endif %}
+                    </strong>
+                </div>
                 {% endif %}
             </div>
-        </div>
 
-        <div>
-            <strong>Property Type:</strong> {{ listing.get_property_type_display }}<br>
-            {% if listing.available_date %}
-                <strong>Available From:</strong> {{ listing.available_date|date:"F j, Y" }}
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- Ad Banner (below images per spec) -->
-    <div class="ad-banner">Advertisement — Google AdSense Banner</div>
-
-    <!-- Description -->
-    <div class="section">
-        <h2>Description</h2>
-        <p style="line-height:1.7; color:#555;">{{ listing.description }}</p>
-    </div>
-
-    <!-- Facilities -->
-    {% if facilities %}
-    <div class="section">
-        <h2>Facilities</h2>
-        <div class="facilities-grid">
-            <span class="facility-chip {% if facilities.wifi %}available{% endif %}">
-                {% if facilities.wifi %}✓{% else %}✗{% endif %} WiFi
-            </span>
-            <span class="facility-chip {% if facilities.car_parking %}available{% endif %}">
-                {% if facilities.car_parking %}✓{% else %}✗{% endif %} Car Parking
-            </span>
-            <span class="facility-chip {% if facilities.bike_parking %}available{% endif %}">
-                {% if facilities.bike_parking %}✓{% else %}✗{% endif %} Bike Parking
-            </span>
-            <span class="facility-chip {% if facilities.attached_bathroom %}available{% endif %}">
-                {% if facilities.attached_bathroom %}✓{% else %}✗{% endif %} Attached Bathroom
-            </span>
-            <span class="facility-chip {% if facilities.drinking_water %}available{% endif %}">
-                {% if facilities.drinking_water %}✓{% else %}✗{% endif %} Drinking Water
-            </span>
-            <span class="facility-chip {% if facilities.water_24_7 %}available{% endif %}">
-                {% if facilities.water_24_7 %}✓{% else %}✗{% endif %} 24/7 Water
-            </span>
-            <span class="facility-chip {% if facilities.furnished %}available{% endif %}">
-                {% if facilities.furnished %}✓{% else %}✗{% endif %} Furnished
-            </span>
-            <span class="facility-chip {% if facilities.balcony %}available{% endif %}">
-                {% if facilities.balcony %}✓{% else %}✗{% endif %} Balcony
-            </span>
-            <span class="facility-chip {% if facilities.cctv %}available{% endif %}">
-                {% if facilities.cctv %}✓{% else %}✗{% endif %} CCTV
-            </span>
-            <span class="facility-chip {% if facilities.security_guard %}available{% endif %}">
-                {% if facilities.security_guard %}✓{% else %}✗{% endif %} Security Guard
-            </span>
-            <span class="facility-chip {% if facilities.pet_allowed %}available{% endif %}">
-                {% if facilities.pet_allowed %}✓{% else %}✗{% endif %} Pet Allowed
-            </span>
-            <span class="facility-chip {% if facilities.laundry %}available{% endif %}">
-                {% if facilities.laundry %}✓{% else %}✗{% endif %} Laundry
-            </span>
-        </div>
-    </div>
-    {% endif %}
-
-    <!-- House Rules -->
-    {% if listing.house_rules %}
-    <div class="section">
-        <h2>House Rules</h2>
-        <p style="line-height:1.7; color:#555;">{{ listing.house_rules }}</p>
-    </div>
-    {% endif %}
-
-    <!-- Map -->
-    {% if listing.latitude and listing.longitude %}
-    <div class="section">
-        <h2>Location on Map</h2>
-        <div class="map-embed-wrapper">
-            <iframe
-                width="100%"
-                height="320"
-                style="border:0; border-radius: 8px;"
-                loading="lazy"
-                allowfullscreen
-                referrerpolicy="no-referrer-when-downgrade"
-                src="https://maps.google.com/maps?q={{ listing.latitude }},{{ listing.longitude }}&z=15&output=embed">
-            </iframe>
-        </div>
-        <a href="https://www.google.com/maps/search/?api=1&query={{ listing.latitude }},{{ listing.longitude }}"
-           target="_blank" rel="noopener" class="map-directions-link">
-            🧭 Get Directions on Google Maps
-        </a>
-    </div>
-    {% endif %}
-
-    <!-- Owner Info & Phone Reveal -->
-    <div class="section">
-        <h2>Contact Owner</h2>
-        <div class="owner-info">
-            <div class="owner-avatar">
-                {{ listing.owner.first_name|first|upper }}
-            </div>
-            <div>
-                <div class="owner-name">{{ listing.owner.first_name }} {{ listing.owner.last_name }}</div>
-                <div style="color:#666; font-size:13px;">Property Owner</div>
-            </div>
-        </div>
-
-        <div class="phone-container">
-            {% if phone_revealed %}
-                <div class="masked-phone" id="phone-display">📞 {{ listing.owner.phone }}</div>
-            {% else %}
-                <div class="masked-phone" id="phone-display">📞 {{ masked_phone }}</div>
-                {% if request.user.is_authenticated %}
-                    <button class="reveal-btn" id="reveal-btn" onclick="startAdTimer()">
-                        👁 Reveal Phone Number
-                    </button>
-                    <div class="ad-overlay" id="ad-overlay" style="display:none;">
-                        <p>Watch this ad to reveal the phone number</p>
-                        <div class="ad-timer" id="ad-timer">5</div>
-                        <div style="background:#444; padding:40px; margin:10px 0; border-radius:4px;">
-                            📢 Advertisement
-                        </div>
-                        <p style="color:#aaa; font-size:13px;">Please wait...</p>
-                    </div>
+            {% if request.user.is_authenticated %}
+                {% if existing_request %}
+                    <span class="request-status {{ existing_request.status }}">
+                        {% if existing_request.status == "pending" %}⏳ Request Pending{% endif %}
+                        {% if existing_request.status == "accepted" %}✓ Request Accepted{% endif %}
+                        {% if existing_request.status == "declined" %}✗ Request Declined{% endif %}
+                    </span>
                 {% else %}
-                    <p style="color:#666; font-size:14px; margin-top:10px;">
-                        <a href="{% url 'login' %}">Login</a> to reveal the phone number.
-                    </p>
+                    <button class="request-btn" onclick="document.getElementById('request-modal-backdrop').style.display='flex'">
+                        🏠 Request to Rent
+                    </button>
                 {% endif %}
             {% endif %}
         </div>
-    </div>
 
+        <!-- Owner Info & Phone Reveal -->
+        <div class="owner-card">
+            <div class="owner-info">
+                <div class="owner-avatar">{{ listing.owner.first_name|first|upper }}</div>
+                <div>
+                    <div class="owner-name">{{ listing.owner.first_name }} {{ listing.owner.last_name }}</div>
+                    <div class="owner-role">Property Owner</div>
+                </div>
+            </div>
+
+            <div class="phone-container">
+                {% if phone_revealed %}
+                    <div class="masked-phone" id="phone-display">📞 {{ listing.owner.phone }}</div>
+                {% else %}
+                    <div class="masked-phone" id="phone-display">📞 {{ masked_phone }}</div>
+                    {% if request.user.is_authenticated %}
+                        <button class="reveal-btn" id="reveal-btn" onclick="startAdTimer()">
+                            👁 Reveal Phone Number
+                        </button>
+                        <div class="ad-overlay" id="ad-overlay" style="display:none;">
+                            <p style="color:#cfe3d1; font-size:13px;">Watch this ad to reveal the phone number</p>
+                            <div class="ad-timer" id="ad-timer">5</div>
+                            <div style="background:rgba(255,255,255,0.08); padding:32px; margin:10px 0; border-radius:8px;">
+                                📢 Advertisement
+                            </div>
+                            <p style="color:#8fae92; font-size:12px;">Please wait...</p>
+                        </div>
+                    {% else %}
+                        <p class="login-prompt"><a href="{% url 'login' %}">Login</a> to reveal the phone number.</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Request to Rent Modal -->
+{% if request.user.is_authenticated %}
+<div class="request-modal-backdrop" id="request-modal-backdrop">
+    <div class="request-modal">
+        <h3>Request to Rent</h3>
+        <p>Send a message to the landlord — mention your move-in date, number of people, or any questions.</p>
+        <form method="post" action="{% url 'request_to_rent' listing.id %}">
+            {% csrf_token %}
+            <textarea name="message" placeholder="Hi, I'm interested in this room. I'd like to move in around..."></textarea>
+            <div class="request-modal-actions">
+                <button type="button" class="request-modal-cancel" onclick="document.getElementById('request-modal-backdrop').style.display='none'">Cancel</button>
+                <button type="submit" class="request-modal-submit">Send Request</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block extra_js %}
@@ -368,12 +420,10 @@ function toggleFavorite() {
         const btn = document.getElementById("fav-btn");
         if (data.status === "added") {
             btn.textContent = "♥ Saved to Favorites";
-            btn.style.background = "#e74c3c";
-            btn.style.color = "white";
+            btn.classList.add("active");
         } else {
             btn.textContent = "♡ Save to Favorites";
-            btn.style.background = "white";
-            btn.style.color = "#e74c3c";
+            btn.classList.remove("active");
         }
     });
 }

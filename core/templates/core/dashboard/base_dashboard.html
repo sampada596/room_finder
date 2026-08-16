@@ -3,23 +3,33 @@
 <div style="display:flex; gap:24px; align-items:flex-start;">
 
     <!-- Sidebar -->
-    <div style="width:220px; flex-shrink:0;">
-        <div style="background:white; border-radius:8px; padding:16px;">
-            <h3 style="font-size:14px; color:#999; text-transform:uppercase; margin-bottom:16px;">Dashboard</h3>
+    <div style="width:230px; flex-shrink:0;">
+        <div style="background:white; border-radius:12px; padding:18px; border:1px solid var(--sage-border);">
+            <h3 style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:16px; font-weight:700;">Dashboard</h3>
             <nav style="display:flex; flex-direction:column; gap:4px;">
-                <a href="{% url 'dashboard_home' %}" style="padding:10px 12px; border-radius:4px; text-decoration:none; color:#333; font-size:14px; {% if request.resolver_match.url_name == 'dashboard_home' %}background:#f0f0f0; font-weight:bold;{% endif %}">
+                <a href="{% url 'dashboard_home' %}"
+                   style="padding:10px 12px; border-radius:8px; text-decoration:none; font-size:14px; display:flex; align-items:center; gap:8px;
+                   {% if request.resolver_match.url_name == 'dashboard_home' %}background:var(--sage-light); color:var(--sage-dark); font-weight:700;{% else %}color:var(--text-secondary); font-weight:500;{% endif %}">
                     📊 Overview
                 </a>
-                <a href="{% url 'dashboard_pending' %}" style="padding:10px 12px; border-radius:4px; text-decoration:none; color:#333; font-size:14px; {% if request.resolver_match.url_name == 'dashboard_pending' %}background:#f0f0f0; font-weight:bold;{% endif %}">
+                <a href="{% url 'dashboard_pending' %}"
+                   style="padding:10px 12px; border-radius:8px; text-decoration:none; font-size:14px; display:flex; align-items:center; gap:8px;
+                   {% if request.resolver_match.url_name == 'dashboard_pending' %}background:var(--sage-light); color:var(--sage-dark); font-weight:700;{% else %}color:var(--text-secondary); font-weight:500;{% endif %}">
                     ⏳ Pending Listings
                 </a>
-                <a href="{% url 'dashboard_approved' %}" style="padding:10px 12px; border-radius:4px; text-decoration:none; color:#333; font-size:14px; {% if request.resolver_match.url_name == 'dashboard_approved' %}background:#f0f0f0; font-weight:bold;{% endif %}">
+                <a href="{% url 'dashboard_approved' %}"
+                   style="padding:10px 12px; border-radius:8px; text-decoration:none; font-size:14px; display:flex; align-items:center; gap:8px;
+                   {% if request.resolver_match.url_name == 'dashboard_approved' %}background:var(--sage-light); color:var(--sage-dark); font-weight:700;{% else %}color:var(--text-secondary); font-weight:500;{% endif %}">
                     ✅ Approved Listings
                 </a>
-                <a href="{% url 'dashboard_rejected' %}" style="padding:10px 12px; border-radius:4px; text-decoration:none; color:#333; font-size:14px; {% if request.resolver_match.url_name == 'dashboard_rejected' %}background:#f0f0f0; font-weight:bold;{% endif %}">
+                <a href="{% url 'dashboard_rejected' %}"
+                   style="padding:10px 12px; border-radius:8px; text-decoration:none; font-size:14px; display:flex; align-items:center; gap:8px;
+                   {% if request.resolver_match.url_name == 'dashboard_rejected' %}background:var(--sage-light); color:var(--sage-dark); font-weight:700;{% else %}color:var(--text-secondary); font-weight:500;{% endif %}">
                     ❌ Rejected Listings
                 </a>
-                <a href="{% url 'dashboard_users' %}" style="padding:10px 12px; border-radius:4px; text-decoration:none; color:#333; font-size:14px; {% if request.resolver_match.url_name == 'dashboard_users' %}background:#f0f0f0; font-weight:bold;{% endif %}">
+                <a href="{% url 'dashboard_users' %}"
+                   style="padding:10px 12px; border-radius:8px; text-decoration:none; font-size:14px; display:flex; align-items:center; gap:8px;
+                   {% if request.resolver_match.url_name == 'dashboard_users' %}background:var(--sage-light); color:var(--sage-dark); font-weight:700;{% else %}color:var(--text-secondary); font-weight:500;{% endif %}">
                     👥 User Management
                 </a>
             </nav>
